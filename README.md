@@ -1,14 +1,4 @@
----
-title: 火币 API 文档
 
-language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-
-toc_footers:
-  - <a href='https://www.hbg.com/zh-cn/apikey/'>创建 API Key </a>
-includes:
-
-search: False
 ---
 
 # 简介
