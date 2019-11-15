@@ -439,8 +439,49 @@ code 的具体解释, 参考对应的 `err-msg`.
 
 ### 交易对
 
+交易对由基础币种和报价币种组成。以交易对 BTC/USDT 为例，BTC 为基础币种，USDT 为报价币种。  
 
+基础币种对应字段为 base-currency 。  
 
+报价币种对应字段为 quote-currency 。 
+
+### 行情
+
+火币K线周期以新加坡时间为基准开始计算，例如日K线的起始周期为新加坡时间0时-新加坡时间次日0时。
+
+### 账户
+
+不同业务对应需要不同的账户，account-id为不同业务账户的唯一标识ID。  
+
+account-id可通过/v1/account/accounts接口获取，并根据account-type区分具体账户。  
+
+账户类型包括：   
+
+- spot 现货账户  
+- otc OTC账户  
+- margin 逐仓杠杆账户，该账户类型以subType区分具体币种对账户  
+- super-margin（或cross-margin） 全仓杠杆账户  
+- point 点卡账户  
+- minepool 矿池账户  
+- etf ETF账户  
+
+### 订单类型
+
+### 订单状态
+
+订单进入撮合引擎后是"等待成交"状态；
+
+如果一个订单被撮合而全部成交，那么它会变成"完全成交"状态；
+
+一个订单被撮合可能出现部分成交，那么它的状态会变成"部分成交"状态，并且继续留在撮合队列中进行撮合；
+
+一个未成交订单撤单成功，，那么它的状态会变成"已撤销"状态；
+
+发起撤销到完成撤销的过程中有一个过程状态"撤单中"；
+
+被撤销或者全部成交的订单将被从撮合队列中剔除。
+
+更多信息，可以点击<a href='https://www.huobi.vn/zh-cn/guide/'>火币成长学院 </a> 进行了解。
 
 # 常见问题
 
@@ -1317,6 +1358,95 @@ acct-balance                | string   | 账户余额       |
 transact-time                 | long   | 交易时间（数据库记录时间）      | 
 record-id }                 | string   | 数据库记录编号（全局唯一）      | 
 
+## 币币现货账户与合约账户划转
+
+API Key 权限：交易
+
+此接口用户币币现货账户与合约账户之间的资金划转。
+
+从现货现货账户转至合约账户，类型为`pro-to-futures`; 从合约账户转至现货账户，类型为`futures-to-pro`
+
+该接口的访问频次的限制为1分钟10次。
+
+### HTTP 请求
+
+- POST ` /v1/futures/transfer`
+
+```json
+{
+  "currency": "btc",
+  "amount": "0.001",
+  "type": "pro-to-futures"
+}
+```
+
+### 请求参数
+
+|参数名称 | 数据类型 | 是否必需 | 默认值 | 描述|取值范围
+|---------  | --------- | -------- | ------- | -----------|---------|
+|currency     | string    | true     | NA      | 币种, e.g. btc||
+|amount   | decimal    | true     | NA      | 划转数量||
+|type     | string    | true     | NA      | 划转类型| 从合约账户到现货账户：“futures-to-pro”，从现货账户到合约账户： “pro-to-futures”|
+
+
+> Response:
+
+```json
+{  
+  "data": 12345
+  "status": "ok"
+}
+```
+
+### 响应数据
+
+参数名称 | 数据类型 | 描述
+------ | ------- | -----
+data   | Long | Transfer id
+status |string| "ok" or "error"
+err-code|string|错误码，具体错误码请见列表
+err-msg|string|错误消息，具体消息内容请列表
+
+### err-code列表
+
+err-code | err-msg(中文） | err-msg(Englis)|补充说明
+------ | ------- | -----|-------------
+|base-msg|||其他错误，具体的err-msg, 请参照对应的错误消息列表。
+|base-currency-error|币种无效|The currency is invalid|
+|frequent-invoke|操作过于频繁，请稍后重试。（如果超过1分钟10次，系统返回该error-code）|the operation is too frequent. Please try again later|如果请求次数超过1分钟10次，系统返回该error-code
+|banned-by-blacklist|黑名单限制|Blacklist restriction|
+|dw-insufficient-balance|可划转余额不足，最大可划转 {0}。（币币账户的余额不足。）|Insufficient balance. You can only transfer {0} at most.|币币账户的余额不足。
+|dw-account-transfer-unavailable|转账暂时不可用|account transfer unavailable|该接口暂时不可用
+|dw-account-transfer-error|由于其他服务不可用导致的划转失败|account transfer error|
+|dw-account-transfer-failed|划转失败。请稍后重试或联系客服 |Failed to transfer. Please try again later.|由于系统异常导致的划转失败
+|dw-account-transfer-failed-account-abnormality|账户异常，划转失败。请稍后重试或联系客服|Account abnormality, failed to transfer。Please try again later.|
+
+### base-msg对应的err-msg列表
+err-code | err-msg(中文） | err-msg(Englis)|补充说明
+------ | ------- | -----|-------------
+|base-msg|用户没有入金权限|Unable to transfer in currently. Please contact customer service.|
+|base-msg|用户没有出金权限|Unable to transfer out currently. Please contact customer service.|
+|base-msg|合约状态异常，无法出入金|Abnormal contracts status. Can’t transfer.|
+|base-msg|子账号没有入金权限，请联系客服|Sub-account doesn't own the permissions to transfer in. Please contact customer service.|
+|base-msg|子账号没有出金权限，请联系客服|Sub-account doesn't own the permissions to transfer out. Please contact customer service.|
+|base-msg|子账号没有划转权限，请登录主账号授权|The sub-account does not have transfer permissions. Please login main account to authorize.|
+|base-msg|可划转余额不足|Insufficient amount available.|合约账户的余额不足
+|base-msg|单笔转出的数量不能低于{0}{1}|The single transfer-out amount must be no less than {0}{1}.|
+|base-msg|单笔转出的数量不能高于{0}{1}|The single transfer-out amount must be no more than {0}{1}.|
+|base-msg|单笔转入的数量不能低于{0}{1}|The single transfer-in amount must be no less than {0}{1}.|
+|base-msg|单笔转入的数量不能高于{0}{1}|The single transfer-in amount must be no more than {0}{1}.|
+|base-msg|您当日累计转出量超过{0}{1}，暂无法转出|Your accumulative transfer-out amount is over the daily maximum, {0}{1}. You can't transfer out for the time being.|
+|base-msg|您当日累计转入量超过{0}{1}，暂无法转入|Your accumulative transfer-in amount is over the daily maximum, {0}{1}. You can't transfer in for the time being.|
+|base-msg|您当日累计净转出量超过{0}{1}，暂无法转出|Your accumulative net transfer-out amount is over the daily maximum, {0}{1}. You can't transfer out for the time being.|
+|base-msg|您当日累计净转入量超过{0}{1}，暂无法转入|Your accumulative net transfer-in amount is over the daily maximum, {0}{1}. You can't transfer in for the time being.|
+|base-msg|超过平台当日累计最大转出量限制，暂无法转出|The platform's accumulative transfer-out amount is over the daily maximum. You can't transfer out for the time being.|
+|base-msg|超过平台当日累计最大转入量限制，暂无法转入|The platform's accumulative transfer-in amount is over the daily maximum. You can't transfer in for the time being.|
+|base-msg|超过平台当日累计最大净转出量限制，暂无法转出|The platform's accumulative net transfer-out amount is over the daily maximum. You can't transfer out for the time being.|
+|base-msg|超过平台当日累计最大净转入量限制，暂无法转入|The platform's accumulative net transfer-in amount is over the daily maximum. You can't transfer in for the time being.|
+|base-msg|划转失败，请稍后重试或联系客服|Transfer failed. Please try again later or contact customer service.|
+|base-msg|服务异常，划转失败，请稍后再试|Abnormal service, transfer failed. Please try again later.|
+|base-msg|您尚未开通合约交易，无访问权限|You don’t have access permission as you have not opened contracts trading.|
+|base-msg|合约品种不存在|This contract type doesn't exist.|没有相应币种的合约
 
 
 ## 资产划转（母子账号之间）
@@ -1789,72 +1919,6 @@ API Key 权限：读取
 | confirm-error  | 区块确认错误 |
 | repealed       | 已撤销 |
 
-# 稳定币兑换
-
-## 稳定币兑换价格查询
-
-GET v1/stable-coin/quote
-API Key 权限：读取
-
-### 请求参数
-
-| 参数名称       | 是否必须 | 类型     | 描述     |取值范围 |
-| ---------- | ---- | ------ | ------ | ---- |
-| currency | true | string | 与HUSD兑换的稳定币币种   |  USDT/PAX/USDC/TUSD |
-| amount     | true | string | 与HUSD兑换的稳定币币种数量   |amount必须为整数      |
-| type     | true | string | 兑换方向  |buy兑入/sell兑出     |
-
-### 响应数据
-
-| 参数名称 | 是否必须  | 数据类型 | 描述   | 取值范围 |
-| ---- | ----- | ---- | ---- | ---- |
-| currency | true | string | 与HUSD兑换的稳定币币种   |  USDT/PAX/USDC/TUSD |
-| amount     | true | string | 与HUSD兑换的稳定币币种数量   |因兑换账户额度等因素影响，返回的amount可能会比请求的amount小      |
-| type     | true | string | 兑换方向  |buy兑入/sell兑出     |
-| exchange-amount     | true | string | 匹配的HUSD数量  |type=buy时，exchange-amount为用户所需支付的husd数量；type=sell时，exchange-amount为用户可获得的husd数量     |
-| quote-id     | true | string | 该次稳定币报价唯一ID  |     |
-| expiration     | true | string | 确认兑换有效期  |时间（一般为接口请求时间向后延伸10秒）     |
-
-### 错误码
-
-| 响应码 | 说明  | 
-| ---- | ----- | 
-| invalid-currency | 币种无效 | 
-| invalid-amount | 币种数量小于最低值（10万）或大于当前可兑换额度 |
-| invalid-type | type不为sell或buy | 
-| quote-failure | 后端其他错误引起的后端其他错误引起的价格查询失败 | 
-
-## 兑换稳定币
-
-POST v1/stable-coin/exchange
-API Key 权限：交易
-
-### 请求参数
-
-| 参数名称       | 是否必须 | 类型     | 描述     |取值范围 |
-| ---------- | ---- | ------ | ------ | ---- |
-| quote-id | true | string | 该次稳定币报价唯一ID   |   |
-
-### 响应数据
-
-| 参数名称 | 是否必须  | 数据类型 | 描述   | 取值范围 |
-| ---- | ----- | ---- | ---- | ---- |
-| transact-id | true | long | 兑换记录ID   |   |
-| currency | true | string | 与HUSD兑换的稳定币币种   |  USDT/PAX/USDC/TUSD |
-| amount     | true | string | 与HUSD兑换的稳定币币种数量   |      |
-| type     | true | string | 兑换方向  |buy兑入/sell兑出     |
-| exchange-amount     | true | string | 匹配的HUSD数量  |type=buy时，exchange-amount为用户所需支付的husd数量；type=sell时，exchange-amount为用户可获得的husd数量     |
-| time     | true | long | 时间戳  |     |
-
-### 错误码
-
-| 响应码 | 说明  | 
-| ---- | ----- | 
-| invalid-quote-id | 无效的quote-id | 
-| insufficient-balance | 可用余额不足 |
-| insufficient-quota | 稳定币限额不足/超出稳定币限额 | 
-| exchange-failure | 后端其他错误引起的兑换失败 | 
-| Base-user-request-exceed-limit | 您的操作太频繁，请稍后再试 | 
 
 # 现货 / 杠杆交易
 
@@ -2692,96 +2756,6 @@ API Key 权限：读取
 |invalid_end_date|end date 是一个61天之前的日期；或者end date是一个未来的日期| 
 
 
-## 币币现货账户与合约账户划转
-
-API Key 权限：交易
-
-此接口用户币币现货账户与合约账户之间的资金划转。
-
-从现货现货账户转至合约账户，类型为`pro-to-futures`; 从合约账户转至现货账户，类型为`futures-to-pro`
-
-该接口的访问频次的限制为1分钟10次。
-
-### HTTP 请求
-
-- POST ` /v1/futures/transfer`
-
-```json
-{
-  "currency": "btc",
-  "amount": "0.001",
-  "type": "pro-to-futures"
-}
-```
-
-### 请求参数
-
-|参数名称 | 数据类型 | 是否必需 | 默认值 | 描述|取值范围
-|---------  | --------- | -------- | ------- | -----------|---------|
-|currency     | string    | true     | NA      | 币种, e.g. btc||
-|amount   | decimal    | true     | NA      | 划转数量||
-|type     | string    | true     | NA      | 划转类型| 从合约账户到现货账户：“futures-to-pro”，从现货账户到合约账户： “pro-to-futures”|
-
-
-> Response:
-
-```json
-{  
-  "data": 12345
-  "status": "ok"
-}
-```
-
-### 响应数据
-
-参数名称 | 数据类型 | 描述
------- | ------- | -----
-data   | Long | Transfer id
-status |string| "ok" or "error"
-err-code|string|错误码，具体错误码请见列表
-err-msg|string|错误消息，具体消息内容请列表
-
-### err-code列表
-
-err-code | err-msg(中文） | err-msg(Englis)|补充说明
------- | ------- | -----|-------------
-|base-msg|||其他错误，具体的err-msg, 请参照对应的错误消息列表。
-|base-currency-error|币种无效|The currency is invalid|
-|frequent-invoke|操作过于频繁，请稍后重试。（如果超过1分钟10次，系统返回该error-code）|the operation is too frequent. Please try again later|如果请求次数超过1分钟10次，系统返回该error-code
-|banned-by-blacklist|黑名单限制|Blacklist restriction|
-|dw-insufficient-balance|可划转余额不足，最大可划转 {0}。（币币账户的余额不足。）|Insufficient balance. You can only transfer {0} at most.|币币账户的余额不足。
-|dw-account-transfer-unavailable|转账暂时不可用|account transfer unavailable|该接口暂时不可用
-|dw-account-transfer-error|由于其他服务不可用导致的划转失败|account transfer error|
-|dw-account-transfer-failed|划转失败。请稍后重试或联系客服 |Failed to transfer. Please try again later.|由于系统异常导致的划转失败
-|dw-account-transfer-failed-account-abnormality|账户异常，划转失败。请稍后重试或联系客服|Account abnormality, failed to transfer。Please try again later.|
-
-### base-msg对应的err-msg列表
-err-code | err-msg(中文） | err-msg(Englis)|补充说明
------- | ------- | -----|-------------
-|base-msg|用户没有入金权限|Unable to transfer in currently. Please contact customer service.|
-|base-msg|用户没有出金权限|Unable to transfer out currently. Please contact customer service.|
-|base-msg|合约状态异常，无法出入金|Abnormal contracts status. Can’t transfer.|
-|base-msg|子账号没有入金权限，请联系客服|Sub-account doesn't own the permissions to transfer in. Please contact customer service.|
-|base-msg|子账号没有出金权限，请联系客服|Sub-account doesn't own the permissions to transfer out. Please contact customer service.|
-|base-msg|子账号没有划转权限，请登录主账号授权|The sub-account does not have transfer permissions. Please login main account to authorize.|
-|base-msg|可划转余额不足|Insufficient amount available.|合约账户的余额不足
-|base-msg|单笔转出的数量不能低于{0}{1}|The single transfer-out amount must be no less than {0}{1}.|
-|base-msg|单笔转出的数量不能高于{0}{1}|The single transfer-out amount must be no more than {0}{1}.|
-|base-msg|单笔转入的数量不能低于{0}{1}|The single transfer-in amount must be no less than {0}{1}.|
-|base-msg|单笔转入的数量不能高于{0}{1}|The single transfer-in amount must be no more than {0}{1}.|
-|base-msg|您当日累计转出量超过{0}{1}，暂无法转出|Your accumulative transfer-out amount is over the daily maximum, {0}{1}. You can't transfer out for the time being.|
-|base-msg|您当日累计转入量超过{0}{1}，暂无法转入|Your accumulative transfer-in amount is over the daily maximum, {0}{1}. You can't transfer in for the time being.|
-|base-msg|您当日累计净转出量超过{0}{1}，暂无法转出|Your accumulative net transfer-out amount is over the daily maximum, {0}{1}. You can't transfer out for the time being.|
-|base-msg|您当日累计净转入量超过{0}{1}，暂无法转入|Your accumulative net transfer-in amount is over the daily maximum, {0}{1}. You can't transfer in for the time being.|
-|base-msg|超过平台当日累计最大转出量限制，暂无法转出|The platform's accumulative transfer-out amount is over the daily maximum. You can't transfer out for the time being.|
-|base-msg|超过平台当日累计最大转入量限制，暂无法转入|The platform's accumulative transfer-in amount is over the daily maximum. You can't transfer in for the time being.|
-|base-msg|超过平台当日累计最大净转出量限制，暂无法转出|The platform's accumulative net transfer-out amount is over the daily maximum. You can't transfer out for the time being.|
-|base-msg|超过平台当日累计最大净转入量限制，暂无法转入|The platform's accumulative net transfer-in amount is over the daily maximum. You can't transfer in for the time being.|
-|base-msg|划转失败，请稍后重试或联系客服|Transfer failed. Please try again later or contact customer service.|
-|base-msg|服务异常，划转失败，请稍后再试|Abnormal service, transfer failed. Please try again later.|
-|base-msg|您尚未开通合约交易，无访问权限|You don’t have access permission as you have not opened contracts trading.|
-|base-msg|合约品种不存在|This contract type doesn't exist.|没有相应币种的合约
-
 ## 获取用户当前手续费率
 
 Api用户查询交易对费率，一次限制最多查10个交易对，子用户的费率和母用户保持一致
@@ -3479,260 +3453,6 @@ API Key 权限：读取
 | { currency | true | string | 币种| |
 |   type | true | string | 账户类型| trade,frozen,loan,interest,transfer-out-available,loan-available|
 |   balance } | true | string | 余额（注：当type= transfer-out-available时，如果balance=-1，意味着该币种余额可全部转出）| |
-
-# ETF（HB10）
-
-## 基本信息
-
-用户可以通过该接口取得关于 ETF 换入换出的 基本信息，包括一次换入最小量，一次换入最大量，一 次换出最小量，一次换出最大量，换入费率，换出费率，最新 ETF 换入换出状态，以及 ETF 的成分结构。
-
-
-### HTTP 请求
-
-- GET `/etf/swap/config`
-
-### 请求参数
-
-参数|是否必填|数据类型|长度|说明|取值范围|
------|-----|-----|------|-------|------|
-etf_name| true | string |- | etf基金名称 | hb10|
-
-> Response:
-
-```json
-{
-  "code": 200,
-  "data": {
-    "purchase_min_amount": 10000,
-    "purchase_max_amount": 100000,
-    "redemption_min_amount": 10000,
-    "redemption_max_amount": 10000,
-    "purchase_fee_rate": 0.001,
-    "redemption_fee_rate": 0.002,
-    "etf_status":1,
-    "unit_price":
-    [
-      {
-        "currency": "eth",
-        "amount": 19.9
-      },
-      {
-        "currency": "btc",
-        "amount": 9.9
-      }
-    ]
-  },
-  "message": null,
-  "success": true
-}
-```
-
-### 响应数据
-
-参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
------------|------------|-----------|------------|----------|--|
-purchase_min_amount | true| int | - | 最小单次换入数量|      |
-purchase_max_amount  | False| int | - | 最大单次换入数量 |      |
-redemption_min_amount  | true| int | - | 最小单次换出数量 |      |
-redemption_max_amount  | False| int | - | 最大单次换出数量 |      |
-purchase_fee_rate  | true| double | (5,4)  | 换入费率 |      |
-redemption_fee_rate  | true| double | (5,4) | 换出费率 |      |
-etf_status  | true| int | - | 换入换出状态 | 状态： 正常 – 1;  由调仓引起的换入换出暂停 - 2; 其他原因引起的换入换出暂停 - 3; 换入暂停 - 4; 换出暂停 – 5  |
-unit_price  | true| Array | - | ETF成分信息，包含成分币代码和对应的数量 | 调仓会引起成分信息发生变化  |
-
-- unit_price
-
-参数|是否必填|数据类型|长度|说明|
------|-----|-----|------|-------|
-currency| true | string |- | 成分币币种 |
-amount| true | double |- | 成分币数量 |
-
-
-## 换入换出
-
-API Key 权限：交易
-
-用户可以通过该接口取得关于 ETF 换入（swap/in）换出（swap/out）的 基本信息，包括一次换入最小量，一次换入最大量，一次换出最小量，一次换出最大量，换入费率，换出费率，最新 ETF 换入换出状态，以及 ETF 的成分结构。
-
-
-### HTTP 请求
-
-- POST ` /etf/swap/in `
-
-- POST ` /etf/swap/out`
-
-### 请求参数
-
-参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
------------|------------|-----------|------------|----------|--|
-etf_name  | true| string | - | etf基金名称|    hb10  |
-amount  | true| int | - | 换入数量  (POST /etf/swap/in) 或 换出数量 (POST /etf/swap/out) | 换入换出数量的范围请参照接口GET /etf/swap/config 提供的相应范围 |
-
-
-> Response:
-
-```json
-{
-    "code": 200,
-    "data": null,
-    "message": null,
-    "success": true
-}
-```
-
-
-### 响应数据
-
-
-参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
------------|------------|-----------|------------|----------|--|
-code | true| int | - | 结果返回码|   请参照返回码解释表 |
-data | true|   | - |  |     |
-message | true|   | - |  |     |
-success | true| Boolean | - | 请求是否成功|  true or false |
-
-* 返回码解释表
-
-返回码|说明|
---|--|
-200|正常|
-10404|基金代码不正确或不存在|
-13403|账户余额不足|
-13404|基金调整中，不能换入换出|
-13405|因配置项问题基金不可换入换出|
-|13406|非API调用，请求被拒绝
-|13410|API签名错误
-|13500|系统错误
-|13601|调仓期：暂停换入换出
-|13603|其他原因，暂停换入和换出
-|13604|暂停换入
-|13605|暂停换出
-|13606|换入或换出的基金份额超过规定范围
-
-## 操作记录
-
-API Key 权限：读取
-
-用户可以通过该接口取得关于 ETF 换入换出操 作的明细记录。最多返回 100 条记录。
-
-
-### HTTP 请求
-
-- GET `/etf/swap/list `
-
-### 请求参数
-
-参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
------------|------------|-----------|------------|----------|--|
-etf_name | true| string | - | etf基金名称|   hb10 |
-offset | true|  int | - | 开始位置 | >=0. 比如，当offset=0, 开始位置就 是最新的这一条记录。 |
-limit | true|  int  | - |最大返回记录条数|  [1, 100]  |
-
-> Response:
-
-```json
-{
-  "code": 200,
-  "data": [
-    {
-      "id": 112222,
-      "gmt_created": 1528855872323,
-      "currency": "hb10",
-      "amount": 11.5,
-      "type": 1,
-      "status": 2,
-      "detail": 
-      {
-        "used_ currency_list": 
-        [
-          {
-            "currency": "btc",
-            "amount": 0.666
-          },
-          {
-            "currency": "eth",
-            "amount": 0.666
-          }
-        ],
-        "rate": 0.002,
-        "fee": 100.11,
-        "point_card_amount":1.0,
-        "obtain_ currency_list": 
-        [
-          {
-            "currency": "hb10",
-            "amount": 1000
-          }
-        ]
-      }
-    },
-    {
-      "id": 112223,
-      "gmt_created": 1528855872323,
-      "currency": "hb10",
-      "amount": 11.5,
-      "type": 2,
-      "status": 1,
-      "detail": 
-      {
-        "used_ currency_list": 
-        [
-          {
-            "currency": "btc",
-            "amount": 0.666
-          },
-          {
-            "currency": "eth",
-            "amount": 0.666
-          }
-        ],
-        "rate": 0.002,
-        "fee": 100.11,
-        "point_card_amount":1.0,
-        "obtain_ currency_list":
-        [
-          {
-            "currency": "hb10",
-            "amount": 1000
-          }
-        ]
-      }
-    }
-  ],
-  "message": null,
-  "success": true
-}
-```
-
-### 响应数据
-
-
-参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
----|------- |------   |---- |-----|--------|
-id | true| long | - |操作ID |     |
-gmt_created | true| long | - |操作时间（毫秒） |     |
-currency | true| string | - |基金名称 |     |
-amount | true| double | - |基金数量 |     |
-type | true| int | - |操作类型 |    换入-1；换出-2 |
-status | true| int | - |操作结果状态 |     成功-2|
-detail | true| Detail[] | - |详情 |     |
-
-Detail
-
-参数|是否必填|数据类型|长度|说明|
------|-----|-----|------|-------|
-used_ currency_list| ture| Currency[]| -| 换出的资产列表。如果是换入，该参数包括的是用于换入的成分币详情。如果是换出，该参数则是用于换出的基金详情。|
-rate|ture| double| -|费率|
-fee|ture| double| -|实际收取的手续费|
-point_card_amount| ture| double|-|用点卡折扣的手续费|
-obtain_ currency_list| ture| Currency[]| -|换回的资产列表。如果是换入，该参数包括的是用 于换出的基金详情。如果是换出，该参数则是用于 换入的成分币详情。 |
-
-Currency
-
-参数|是否必填|数据类型|长度|说明|
------|-----|-----|------|-------|
-currency| true | string |- | 成分币名称或基金名称 |
-amount| true | double |- | 数量 |
 
 # Websocket行情数据
 
@@ -4973,10 +4693,330 @@ state                |string   |订单状态，请参考订单状态说明|
 cancel-at            |long     |撤单时间|
 stop-price              | string  | 止盈止损订单触发价格   | 
 operator              | string  |  止盈止损订单触发价运算符   |
-  
+
+# 稳定币兑换
+
+## 稳定币兑换价格查询
+
+GET v1/stable-coin/quote
+API Key 权限：读取
+
+### 请求参数
+
+| 参数名称       | 是否必须 | 类型     | 描述     |取值范围 |
+| ---------- | ---- | ------ | ------ | ---- |
+| currency | true | string | 与HUSD兑换的稳定币币种   |  USDT/PAX/USDC/TUSD |
+| amount     | true | string | 与HUSD兑换的稳定币币种数量   |amount必须为整数      |
+| type     | true | string | 兑换方向  |buy兑入/sell兑出     |
+
+### 响应数据
+
+| 参数名称 | 是否必须  | 数据类型 | 描述   | 取值范围 |
+| ---- | ----- | ---- | ---- | ---- |
+| currency | true | string | 与HUSD兑换的稳定币币种   |  USDT/PAX/USDC/TUSD |
+| amount     | true | string | 与HUSD兑换的稳定币币种数量   |因兑换账户额度等因素影响，返回的amount可能会比请求的amount小      |
+| type     | true | string | 兑换方向  |buy兑入/sell兑出     |
+| exchange-amount     | true | string | 匹配的HUSD数量  |type=buy时，exchange-amount为用户所需支付的husd数量；type=sell时，exchange-amount为用户可获得的husd数量     |
+| quote-id     | true | string | 该次稳定币报价唯一ID  |     |
+| expiration     | true | string | 确认兑换有效期  |时间（一般为接口请求时间向后延伸10秒）     |
+
+### 错误码
+
+| 响应码 | 说明  | 
+| ---- | ----- | 
+| invalid-currency | 币种无效 | 
+| invalid-amount | 币种数量小于最低值（10万）或大于当前可兑换额度 |
+| invalid-type | type不为sell或buy | 
+| quote-failure | 后端其他错误引起的后端其他错误引起的价格查询失败 | 
+
+## 兑换稳定币
+
+POST v1/stable-coin/exchange
+API Key 权限：交易
+
+### 请求参数
+
+| 参数名称       | 是否必须 | 类型     | 描述     |取值范围 |
+| ---------- | ---- | ------ | ------ | ---- |
+| quote-id | true | string | 该次稳定币报价唯一ID   |   |
+
+### 响应数据
+
+| 参数名称 | 是否必须  | 数据类型 | 描述   | 取值范围 |
+| ---- | ----- | ---- | ---- | ---- |
+| transact-id | true | long | 兑换记录ID   |   |
+| currency | true | string | 与HUSD兑换的稳定币币种   |  USDT/PAX/USDC/TUSD |
+| amount     | true | string | 与HUSD兑换的稳定币币种数量   |      |
+| type     | true | string | 兑换方向  |buy兑入/sell兑出     |
+| exchange-amount     | true | string | 匹配的HUSD数量  |type=buy时，exchange-amount为用户所需支付的husd数量；type=sell时，exchange-amount为用户可获得的husd数量     |
+| time     | true | long | 时间戳  |     |
+
+### 错误码
+
+| 响应码 | 说明  | 
+| ---- | ----- | 
+| invalid-quote-id | 无效的quote-id | 
+| insufficient-balance | 可用余额不足 |
+| insufficient-quota | 稳定币限额不足/超出稳定币限额 | 
+| exchange-failure | 后端其他错误引起的兑换失败 | 
+| Base-user-request-exceed-limit | 您的操作太频繁，请稍后再试 | 
+
+# ETF（HB10）
+
+## 基本信息
+
+用户可以通过该接口取得关于 ETF 换入换出的 基本信息，包括一次换入最小量，一次换入最大量，一 次换出最小量，一次换出最大量，换入费率，换出费率，最新 ETF 换入换出状态，以及 ETF 的成分结构。
+
+
+### HTTP 请求
+
+- GET `/etf/swap/config`
+
+### 请求参数
+
+参数|是否必填|数据类型|长度|说明|取值范围|
+-----|-----|-----|------|-------|------|
+etf_name| true | string |- | etf基金名称 | hb10|
+
+> Response:
+
+```json
+{
+  "code": 200,
+  "data": {
+    "purchase_min_amount": 10000,
+    "purchase_max_amount": 100000,
+    "redemption_min_amount": 10000,
+    "redemption_max_amount": 10000,
+    "purchase_fee_rate": 0.001,
+    "redemption_fee_rate": 0.002,
+    "etf_status":1,
+    "unit_price":
+    [
+      {
+        "currency": "eth",
+        "amount": 19.9
+      },
+      {
+        "currency": "btc",
+        "amount": 9.9
+      }
+    ]
+  },
+  "message": null,
+  "success": true
+}
+```
+
+### 响应数据
+
+参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
+-----------|------------|-----------|------------|----------|--|
+purchase_min_amount | true| int | - | 最小单次换入数量|      |
+purchase_max_amount  | False| int | - | 最大单次换入数量 |      |
+redemption_min_amount  | true| int | - | 最小单次换出数量 |      |
+redemption_max_amount  | False| int | - | 最大单次换出数量 |      |
+purchase_fee_rate  | true| double | (5,4)  | 换入费率 |      |
+redemption_fee_rate  | true| double | (5,4) | 换出费率 |      |
+etf_status  | true| int | - | 换入换出状态 | 状态： 正常 – 1;  由调仓引起的换入换出暂停 - 2; 其他原因引起的换入换出暂停 - 3; 换入暂停 - 4; 换出暂停 – 5  |
+unit_price  | true| Array | - | ETF成分信息，包含成分币代码和对应的数量 | 调仓会引起成分信息发生变化  |
+
+- unit_price
+
+参数|是否必填|数据类型|长度|说明|
+-----|-----|-----|------|-------|
+currency| true | string |- | 成分币币种 |
+amount| true | double |- | 成分币数量 |
+
+
+## 换入换出
+
+API Key 权限：交易
+
+用户可以通过该接口取得关于 ETF 换入（swap/in）换出（swap/out）的 基本信息，包括一次换入最小量，一次换入最大量，一次换出最小量，一次换出最大量，换入费率，换出费率，最新 ETF 换入换出状态，以及 ETF 的成分结构。
+
+
+### HTTP 请求
+
+- POST ` /etf/swap/in `
+
+- POST ` /etf/swap/out`
+
+### 请求参数
+
+参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
+-----------|------------|-----------|------------|----------|--|
+etf_name  | true| string | - | etf基金名称|    hb10  |
+amount  | true| int | - | 换入数量  (POST /etf/swap/in) 或 换出数量 (POST /etf/swap/out) | 换入换出数量的范围请参照接口GET /etf/swap/config 提供的相应范围 |
+
+
+> Response:
+
+```json
+{
+    "code": 200,
+    "data": null,
+    "message": null,
+    "success": true
+}
+```
+
+
+### 响应数据
+
+
+参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
+-----------|------------|-----------|------------|----------|--|
+code | true| int | - | 结果返回码|   请参照返回码解释表 |
+data | true|   | - |  |     |
+message | true|   | - |  |     |
+success | true| Boolean | - | 请求是否成功|  true or false |
+
+* 返回码解释表
+
+返回码|说明|
+--|--|
+200|正常|
+10404|基金代码不正确或不存在|
+13403|账户余额不足|
+13404|基金调整中，不能换入换出|
+13405|因配置项问题基金不可换入换出|
+|13406|非API调用，请求被拒绝
+|13410|API签名错误
+|13500|系统错误
+|13601|调仓期：暂停换入换出
+|13603|其他原因，暂停换入和换出
+|13604|暂停换入
+|13605|暂停换出
+|13606|换入或换出的基金份额超过规定范围
+
+## 操作记录
+
+API Key 权限：读取
+
+用户可以通过该接口取得关于 ETF 换入换出操 作的明细记录。最多返回 100 条记录。
+
+
+### HTTP 请求
+
+- GET `/etf/swap/list `
+
+### 请求参数
+
+参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
+-----------|------------|-----------|------------|----------|--|
+etf_name | true| string | - | etf基金名称|   hb10 |
+offset | true|  int | - | 开始位置 | >=0. 比如，当offset=0, 开始位置就 是最新的这一条记录。 |
+limit | true|  int  | - |最大返回记录条数|  [1, 100]  |
+
+> Response:
+
+```json
+{
+  "code": 200,
+  "data": [
+    {
+      "id": 112222,
+      "gmt_created": 1528855872323,
+      "currency": "hb10",
+      "amount": 11.5,
+      "type": 1,
+      "status": 2,
+      "detail": 
+      {
+        "used_ currency_list": 
+        [
+          {
+            "currency": "btc",
+            "amount": 0.666
+          },
+          {
+            "currency": "eth",
+            "amount": 0.666
+          }
+        ],
+        "rate": 0.002,
+        "fee": 100.11,
+        "point_card_amount":1.0,
+        "obtain_ currency_list": 
+        [
+          {
+            "currency": "hb10",
+            "amount": 1000
+          }
+        ]
+      }
+    },
+    {
+      "id": 112223,
+      "gmt_created": 1528855872323,
+      "currency": "hb10",
+      "amount": 11.5,
+      "type": 2,
+      "status": 1,
+      "detail": 
+      {
+        "used_ currency_list": 
+        [
+          {
+            "currency": "btc",
+            "amount": 0.666
+          },
+          {
+            "currency": "eth",
+            "amount": 0.666
+          }
+        ],
+        "rate": 0.002,
+        "fee": 100.11,
+        "point_card_amount":1.0,
+        "obtain_ currency_list":
+        [
+          {
+            "currency": "hb10",
+            "amount": 1000
+          }
+        ]
+      }
+    }
+  ],
+  "message": null,
+  "success": true
+}
+```
+
+### 响应数据
+
+
+参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
+---|------- |------   |---- |-----|--------|
+id | true| long | - |操作ID |     |
+gmt_created | true| long | - |操作时间（毫秒） |     |
+currency | true| string | - |基金名称 |     |
+amount | true| double | - |基金数量 |     |
+type | true| int | - |操作类型 |    换入-1；换出-2 |
+status | true| int | - |操作结果状态 |     成功-2|
+detail | true| Detail[] | - |详情 |     |
+
+Detail
+
+参数|是否必填|数据类型|长度|说明|
+-----|-----|-----|------|-------|
+used_ currency_list| ture| Currency[]| -| 换出的资产列表。如果是换入，该参数包括的是用于换入的成分币详情。如果是换出，该参数则是用于换出的基金详情。|
+rate|ture| double| -|费率|
+fee|ture| double| -|实际收取的手续费|
+point_card_amount| ture| double|-|用点卡折扣的手续费|
+obtain_ currency_list| ture| Currency[]| -|换回的资产列表。如果是换入，该参数包括的是用 于换出的基金详情。如果是换出，该参数则是用于 换入的成分币详情。 |
+
+Currency
+
+参数|是否必填|数据类型|长度|说明|
+-----|-----|-----|------|-------|
+currency| true | string |- | 成分币名称或基金名称 |
+amount| true | double |- | 数量 |
 
 <br>
-<br>
+<br>
 <br>
 <br>
 <br>
