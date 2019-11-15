@@ -142,6 +142,8 @@ WebSocket是HTML5一种新的协议（Protocol）。它实现了客户端与服�
 
 市场行情和买卖深度等信息，建议开发者使用WebSocket API进行获取。
 
+### 接口鉴权说明
+
 以上两种接口均包含公共接口和私有接口两种类型。  
 
 公共接口可用于获取基础信息和行情数据。公共接口无需认证即可调用。  
@@ -180,7 +182,9 @@ https://github.com/huobiapi?tab=repositories
 # 接入说明
 
 ## 访问
-您可以自行比较使用api.huobi.pro和api-aws.huobi.pro两个域名的延迟情况，选择延迟低的进行使用。    
+您可以自行比较使用api.huobi.pro和api-aws.huobi.pro两个域名的延迟情况，选择延迟低的进行使用。   
+
+其中，api-aws.huobi.pro域名对使用aws云服务的用户做了一定的链路延迟优化。  
 
 **REST API**
 
@@ -198,12 +202,10 @@ https://github.com/huobiapi?tab=repositories
 
 **`wss://api.huobi.pro/ws/v1`**  
 
-**`wss://api-aws.huobi.pro/ws/v1`**    
-
-注：api-aws.huobi.pro域名对使用aws云服务的用户做了一定的链路延迟优化。  
+**`wss://api-aws.huobi.pro/ws/v1`**     
 
 <aside class="notice">
-请使用中国大陆以外的 IP 访问火币 API。
+请使用中国大陆以外的 IP 访问火币 API。
 </aside>
 <aside class="notice">
 鉴于延迟高和稳定性差等原因，不建议通过代理的方式访问火币API。
@@ -222,7 +224,8 @@ https://github.com/huobiapi?tab=repositories
 
 ### 签名说明
 
-API 请求在通过 internet 传输的过程中极有可能被篡改，为了确保请求未被更改，除公共接口（基础信息，行情数据）外的私有接口均必须使用您的 API Key 做签名认证，以校验参数或参数值在传输途中是否发生了更改。每一个API Key需要有适当的权限才能访问相应的接口。每个新创建的API Key都需要分配权限。权限类型分为：读取，交易，提币。在使用接口前，请查看每个接口的权限类型，并确认你的API Key有相应的权限。
+API 请求在通过 internet 传输的过程中极有可能被篡改，为了确保请求未被更改，除公共接口（基础信息，行情数据）外的私有接口均必须使用您的 API Key 做签名认证，以校验参数或参数值在传输途中是否发生了更改。  
+每一个API Key需要有适当的权限才能访问相应的接口，每个新创建的API Key都需要分配权限。在使用接口前，请查看每个接口的权限类型，并确认你的API Key有相应的权限。
 
 一个合法的请求由以下几部分组成：
 
@@ -243,7 +246,16 @@ API 请求在通过 internet 传输的过程中极有可能被篡改，为了确
 
 ### 创建 API Key
 
-您可以在 <a href='https://www.hbg.com/zh-cn/apikey/'>这里 </a> 创建 API Key。
+每个母账号可创建5组Api Key，每个Api Key可对应设置读取、交易、提币三种权限。  
+每个母账号还可创建200个子账号，每个子账号可创建5组Api Key，每个Api Key可对应设置读取、交易两种权限。
+
+权限说明如下：
+
+- 读取权限：读取权限用于对数据的查询接口，例如：订单查询、成交查询等。
+- 交易权限：交易权限用于下单、撤单、划转类接口。
+- 提币权限：提币权限用于数字货币创建提币定点、取消提币订单操作。
+
+您可以点击 <a href='https://www.hbg.com/zh-cn/apikey/'>这里 </a> 创建 API Key。
 
 API Key 包括以下两部分
 
@@ -252,15 +264,11 @@ API Key 包括以下两部分
 - `Secret Key`  签名认证加密所使用的密钥（仅申请时可见）
 
 <aside class="notice">
-创建 API Key 时可以选择绑定 IP 地址，未绑定 IP 地址的 API Key 有效期为90天。
-</aside>
-<aside class="notice">
-API Key 具有包括交易、借贷和充提币等所有操作权限。
+创建 API Key 时可以绑定 IP 地址，未绑定 IP 地址的 API Key 有效期为90天。出于安全考虑，强烈建议您绑定 IP 地址.
 </aside>
 <aside class="warning">
 这两个密钥与账号安全紧密相关，无论何时都请勿向其它人透露。
 </aside>
-
 
 ### 签名步骤
 
