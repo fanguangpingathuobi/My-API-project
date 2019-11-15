@@ -435,6 +435,13 @@ code 的具体解释, 参考对应的 `err-msg`.
 其他接口子账号不可访问，如果尝试访问，系统会返回 “error-code 403”。
 </aside>
 
+## 业务说明
+
+### 交易对
+
+
+
+
 # 常见问题
 
 ### 经常断线或者丢数据
@@ -462,8 +469,6 @@ code 的具体解释, 参考对应的 `err-msg`.
 ### 返回 gateway-internal-error
 
 * 检查 POST 请求是否在 header 中声明 Content-Type:application/json
-
-
 
 
 # 基础信息
