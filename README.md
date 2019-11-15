@@ -132,18 +132,15 @@ API key创建成功后，请您务必记住以下信息：
 
 ### REST API
 
-REST，即Representational State Transfer的缩写，是目前最流行的一种互联网软件架构。它结构清晰、符合标准、易于理解、扩展方便，正得到越来越多网站的采用。其优点如下：
+REST，即Representational State Transfer的缩写，是目前最流行的一种互联网软件架构。在RESTful架构中，每一个URL代表一种资源。    
 
-在RESTful架构中，每一个URL代表一种资源；  
-客户端通过四个HTTP指令，对服务器端资源进行操作，实现“表现层状态转化”。 建议开发者使用REST API进行币币交易或者资产提现等操作。  
+交易或资产提现等操作，建议开发者使用REST API进行操作。  
 
 ### WebSocket API
 
-WebSocket是HTML5一种新的协议（Protocol）。它实现了客户端与服务器全双工通信，使得数据可以快速地双向传播。通过一次简单的握手就可以建立客户端和服务器连接，服务器根据业务规则可以主动推送信息给客户端。其优点如下：
+WebSocket是HTML5一种新的协议（Protocol）。它实现了客户端与服务器全双工通信，通过一次简单的握手就可以建立客户端和服务器连接，服务器可以根据业务规则主动推送信息给客户端。
 
-客户端和服务器进行数据传输时，请求头信息比较小，大概2个字节;
-客户端和服务器皆可以主动地发送数据给对方；
-不需要多次创建TCP请求和销毁，节约宽带和服务器的资源。 强烈建议开发者使用WebSocket API获取市场行情和买卖深度等信息。
+市场行情和买卖深度等信息，建议开发者使用WebSocket API进行获取。
 
 以上两种接口均包含公共接口和私有接口两种类型。  
 
@@ -151,6 +148,34 @@ WebSocket是HTML5一种新的协议（Protocol）。它实现了客户端与服�
 
 私有接口可用于交易管理和账户管理。每个私有请求必须使用您的API key进行签名验证。
 
+## SDK与代码示例
+
+**SDK（推荐）**
+
+[Java](https://github.com/huobiapi/huobi_Java)
+
+[Python3](https://github.com/huobiapi/huobi_Python)
+
+[C++](https://github.com/huobiapi/huobi_Cpp)
+
+**其它代码示例**
+
+https://github.com/huobiapi?tab=repositories
+
+## 公告订阅
+
+关于API新增、更新、下线等信息火币会提前发布公告进行通知，建议您关注和订阅我们的公告，及时获取相关信息。  
+
+公告订阅流程：点击“API公告”右上角“关注”按钮，用账号登录成功后，再次点击“关注”按钮，并选择需要关注的内容类型，按钮变为“正在关注”，即表示订阅成功。若无账号，点击弹窗左下角“注册”按钮，进行注册。  
+
+您可以点击 <a href='https://huobiglobal.zendesk.com/hc/zh-cn/sections/360000070201-API-%E5%85%AC%E5%91%8A'>这里 </a> 订阅公告。
+
+## 联系我们
+
+使用过程中如有问题或者建议，您可选择以下任一方式联系我们：
+
+- 加入官方QQ群（火币网API交流群(8) 595882031），进群时请注明UID 和编程语言。
+- 发送邮件至api_service@huobi.com。
 
 # 接入说明
 
@@ -402,20 +427,6 @@ code 的具体解释, 参考对应的 `err-msg`.
 |order-orderstate-error|订单状态错误|
 |order-datelimit-error|查询超出时间限制|
 |order-update-error|订单更新出错|
-
-##  SDK 与代码示例
-
-**SDK（推荐）**
-
-[Java](https://github.com/huobiapi/huobi_Java)
-
-[Python3](https://github.com/huobiapi/huobi_Python)
-
-[C++](https://github.com/huobiapi/huobi_Cpp)
-
-**其它代码示例**
-
-https://github.com/huobiapi?tab=repositories
 
 ## 常见问题 Q & A
 
