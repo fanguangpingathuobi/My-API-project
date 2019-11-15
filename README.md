@@ -73,43 +73,6 @@
 2. 提供其他交易平台 maker 交易量截图证明（比如30天内成交量，或者 VIP 等级等）；
 3. 请简要阐述做市方法，不需要细节。
 
-## 子账号
-
-子账号可以用来隔离资产与交易，资产可以在母子账号之间划转； 子账号用户只能在子账号内进行交易，并且子账号之间资产不能直接划转，只有母账号有划转权限。
-
-子账号拥有独立的登陆账号密码和 API Key。
-
-<aside class="notice">
-子账号的 API Key 也可绑定 IP 地址, 有效期的限制与母账号的API Key一致。
-</aside>
-
-子账号可以访问所有公共接口，包括基本信息和市场行情，子账号可以访问的私有接口如下：
-
-接口|说明|
-----------------------|---------------------|
-[POST /v1/order/orders/place](#fd6ce2a756)	|创建并执行订单|
-[POST /v1/order/orders/{order-id}/submitcancel](#4e53c0fccd)	|撤销一个订单|
-[POST /v1/order/orders/batchcancel](#ad00632ed5)	|批量撤销订单|
-[POST /v1/order/orders/batchCancelOpenOrders](#open-orders)	|撤销当前委托订单|
-[GET /v1/order/orders/{order-id}](#92d59b6aad)	|查询一个订单详情|
-[GET /v1/order/orders](#d72a5b49e7)	|查询当前委托、历史委托|
-[GET /v1/order/openOrders](#95f2078356)	|查询当前委托订单|
-[GET /v1/order/matchresults](#0fa6055598)	|查询成交|
-[GET /v1/order/orders/{order-id}/matchresults](#56c6c47284)	|查询某个订单的成交明细|
-[GET /v1/account/accounts](#bd9157656f)	|查询当前用户的所有账户|
-[GET /v1/account/accounts/{account-id}/balance](#870c0ab88b)	|查询指定账户的余额|
-[POST /v1/futures/transfer](#e227a2a3e8)	|币币与合约账户间的资金划转|
-[POST /v1/dw/transfer-in/margin](#0d3c2e7382)|从币币交易账户划转至杠杆账户|
-[POST /v1/dw/transfer-out/margin](#0d3c2e7382)|从杠杆账户划转至币币交易账户|
-[POST /v1/margin/orders](#48cca1ce88)|申请借贷|
-[POST /v1/margin/orders/{order-id}/repay](#48aa7c8199)|归还借贷|
-[GET /v1/margin/loan-orders](#e52396720a)|查询借贷记录|
-[GET /v1/margin/accounts/balance](#6e79ba8e80)|查询杠杆账户余额|
-
-<aside class="notice">
-其他接口子账号不可访问，如果尝试访问，系统会返回 “error-code 403”。
-</aside>
-
 # 初次必看
 
 ## 接入准备
@@ -211,15 +174,6 @@ https://github.com/huobiapi?tab=repositories
 鉴于延迟高和稳定性差等原因，不建议通过代理的方式访问火币API。
 </aside>
 
-## 限频规则
-
-- 现货 / 杠杆（api.huobi.pro）：10秒100次
-
-<aside class="notice">
-单个 API Key 维度限制。行情 API 访问无需签名。
-</aside>
-
-
 ## 签名认证
 
 ### 签名说明
@@ -255,9 +209,7 @@ API 请求在通过 internet 传输的过程中极有可能被篡改，为了确
 - 交易权限：交易权限用于下单、撤单、划转类接口。
 - 提币权限：提币权限用于数字货币创建提币定点、取消提币订单操作。
 
-您可以点击 <a href='https://www.hbg.com/zh-cn/apikey/'>这里 </a> 创建 API Key。
-
-API Key 包括以下两部分
+您可以点击 <a href='https://www.hbg.com/zh-cn/apikey/'>这里 </a> 创建 API Key，创建成功后请务必记住以下信息：
 
 - `Access Key`  API 访问密钥
   
@@ -372,6 +324,14 @@ api.huobi.pro\n
 
 2. 把数字签名在URL编码后加入到路径参数里，参数名为“Signature”。
 
+## 限频规则
+
+- 现货 / 杠杆（api.huobi.pro）：10秒100次
+
+<aside class="notice">
+单个 API Key 维度限制。行情 API 访问无需签名。
+</aside>
+
 ## 请求格式
 
 所有的API请求都以GET或者POST形式发出。对于GET请求，所有的参数都在路径参数里；对于POST请求，所有参数则以JSON格式发送在请求主体（body）里。
@@ -436,7 +396,46 @@ code 的具体解释, 参考对应的 `err-msg`.
 |order-datelimit-error|查询超出时间限制|
 |order-update-error|订单更新出错|
 
-## 常见问题 Q & A
+## 子账号
+
+子账号可以用来隔离资产与交易，资产可以在母子账号之间划转；子账号用户只能在子账号内进行交易，并且子账号之间资产不能直接划转，只有母账号有划转权限。  
+
+子账号拥有独立的登录账号密码和 API Key，均由母账号在网页端进行管理。 
+
+子账号的 API Key 也可设置权限，包含读取、交易两种权限。
+
+子账号的 API Key 也可绑定 IP 地址, 有效期的限制与母账号的API Key一致。
+
+您可以点击 <a href='https://account.hbg.com/zh-cn/subaccount/management/'>这里 </a> 创建子账号并管理。  
+
+子账号可以访问所有公共接口，包括基本信息和市场行情，子账号可以访问的私有接口如下：
+
+接口|说明|
+----------------------|---------------------|
+[POST /v1/order/orders/place](#fd6ce2a756)	|创建并执行订单|
+[POST /v1/order/orders/{order-id}/submitcancel](#4e53c0fccd)	|撤销一个订单|
+[POST /v1/order/orders/batchcancel](#ad00632ed5)	|批量撤销订单|
+[POST /v1/order/orders/batchCancelOpenOrders](#open-orders)	|撤销当前委托订单|
+[GET /v1/order/orders/{order-id}](#92d59b6aad)	|查询一个订单详情|
+[GET /v1/order/orders](#d72a5b49e7)	|查询当前委托、历史委托|
+[GET /v1/order/openOrders](#95f2078356)	|查询当前委托订单|
+[GET /v1/order/matchresults](#0fa6055598)	|查询成交|
+[GET /v1/order/orders/{order-id}/matchresults](#56c6c47284)	|查询某个订单的成交明细|
+[GET /v1/account/accounts](#bd9157656f)	|查询当前用户的所有账户|
+[GET /v1/account/accounts/{account-id}/balance](#870c0ab88b)	|查询指定账户的余额|
+[POST /v1/futures/transfer](#e227a2a3e8)	|币币与合约账户间的资金划转|
+[POST /v1/dw/transfer-in/margin](#0d3c2e7382)|从币币交易账户划转至杠杆账户|
+[POST /v1/dw/transfer-out/margin](#0d3c2e7382)|从杠杆账户划转至币币交易账户|
+[POST /v1/margin/orders](#48cca1ce88)|申请借贷|
+[POST /v1/margin/orders/{order-id}/repay](#48aa7c8199)|归还借贷|
+[GET /v1/margin/loan-orders](#e52396720a)|查询借贷记录|
+[GET /v1/margin/accounts/balance](#6e79ba8e80)|查询杠杆账户余额|
+
+<aside class="notice">
+其他接口子账号不可访问，如果尝试访问，系统会返回 “error-code 403”。
+</aside>
+
+# 常见问题
 
 ### 经常断线或者丢数据
 
