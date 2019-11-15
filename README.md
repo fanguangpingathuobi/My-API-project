@@ -226,7 +226,7 @@ API 请求在通过 internet 传输的过程中极有可能被篡改，为了确
 
 规范要计算签名的请求 因为使用 HMAC 进行签名计算时，使用不同内容计算得到的结果会完全不同。所以在进行签名计算前，请先对请求进行规范化处理。下面以查询某订单详情请求为例进行说明：
 
-查询某订单详情
+查询某订单详情时完整的请求URL
 
 `https://api.huobi.pro/v1/order/orders?`
 
@@ -257,7 +257,7 @@ api.huobi.pro\n
 /v1/order/orders\n
 `
 
-#### 4. 按照ASCII码的顺序对参数名进行排序。例如，下面是请求参数的原始顺序，进行过编码后
+#### 4. 按照ASCII码顺序对参数名进行排序，且进行URI编码，例如，下面是请求参数的原始顺序，且进行URI编码后
 
 
 `AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx`
@@ -342,7 +342,7 @@ api.huobi.pro\n
 
 ### 返回内容格式
 
-> 返回内容将会是以下格式:
+> Responds:
 
 ```json
 {
@@ -1281,7 +1281,7 @@ spot：现货账户， margin：逐仓杠杆账户，otc：OTC 账户，point：
 | id    | true  | long   | 账户 ID |      |
 | state | true  | string | 账户状态  | working：正常  lock：账户被锁定 |
 | type  | true  | string | 账户类型  | spot：现货账户， margin：逐仓杠杆账户，otc：OTC 账户，point：点卡账户，super-margin：全仓杠杆账户 |
-| list  | false | Array  | 子账号数组 |     |
+| list  | false | Array  |      |     |
 
 list字段说明
 
@@ -1560,7 +1560,7 @@ API Key 权限：读取
 
 参数|是否必填 | 数据类型 | 长度 | 说明 | 取值范围 |
 -----------|------------|-----------|------------|----------|--|
-sub-uid|true|	long|	-|	子用户的 UID|-|
+sub-uid|true|	long|	-|	子账号的 UID|-|
 
 > Response:
 
