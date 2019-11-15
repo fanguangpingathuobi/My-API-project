@@ -179,7 +179,7 @@ https://github.com/huobiapi?tab=repositories
 
 # 接入说明
 
-## 接入 URLs
+## 访问
 您可以自行比较使用api.huobi.pro和api-aws.huobi.pro两个域名的延迟情况，选择延迟低的进行使用。    
 
 **REST API**
@@ -206,7 +206,7 @@ https://github.com/huobiapi?tab=repositories
 请使用中国大陆以外的 IP 访问火币 API。
 </aside>
 <aside class="notice">
-鉴于延迟高和稳定性差等原因，不建议通过代理的方式访问火币 API。
+鉴于延迟高和稳定性差等原因，不建议通过代理的方式访问火币API。
 </aside>
 
 ## 限频规则
