@@ -52,7 +52,9 @@ AccessKeyId=rfhxxxxx-950000847-boooooo3-432c0&SignatureMethod=HmacSHA256&Signatu
 8) 签名时所带Host应与请求接口时Host相同
 9) Api Key 与 Secret Key中是否存在隐藏特殊字符，影响签名
 
-- 当前官方已支持Java、Python3、C++三种语言的SDK， 可根据语言选择使用或进行参考。[[https://github.com/HuobiRDCenter | SDK下载地址]]
+- 当前官方已支持Java、Python3、C++三种语言的SDK， 可根据语言选择使用或进行参考。 
+<a href='https://github.com/HuobiRDCenter'>SDK下载地址 </a> 
+[[https://github.com/HuobiRDCenter | SDK下载地址]]
 - [[ http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/python_signature_demo/ | Python 签名&demo ]]
 - [[ http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/java_signature_demo/ | JAVA 签名&demo ]]
 - [[ http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/cpp_signature_demo/ | CPP 签名&demo ]]
