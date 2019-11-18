@@ -144,12 +144,12 @@ chain参数可使用值请参考/v2/reference/currencies接口。
 
 ### Q3：创建提币时fee字段应该怎么填？
 A：请参考/v2/reference/currencies接口返回值，返回信息中withdrawFeeType为提币手续费类型，根据类型选择对应字段设置提币手续费。  
-提币手续费类型包含：  
-transactFeeWithdraw : 单次提币手续费（仅对固定类型有效，withdrawFeeType=fixed）  	
+提币手续费类型包含：    
+transactFeeWithdraw : 单次提币手续费（仅对固定类型有效，withdrawFeeType=fixed）    	
 minTransactFeeWithdraw : 最小单次提币手续费（仅对区间类型有效，withdrawFeeType=circulated）  	
-maxTransactFeeWithdraw : 最大单次提币手续费（仅对区间类型和有上限的比例类型有效，withdrawFeeType=circulated or ratio）  	
-transactFeeRateWithdraw :  单次提币手续费率（仅对比例类型有效，withdrawFeeType=ratio）  	
-接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2  
+maxTransactFeeWithdraw : 最大单次提币手续费（仅对区间类型和有上限的比例类型有效，withdrawFeeType=circulated or ratio）    	
+transactFeeRateWithdraw :  单次提币手续费率（仅对比例类型有效，withdrawFeeType=ratio）    	
+接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2   
 
 ### Q4：如何查看我的提币额度？
 A：请参考/v2/account/withdraw/quota接口返回值，返回信息中包含您查询币种的单次、当日、当前、总提币额度以及剩余额度的信息。  
