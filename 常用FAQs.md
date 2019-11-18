@@ -52,12 +52,11 @@ AccessKeyId=rfhxxxxx-950000847-boooooo3-432c0&SignatureMethod=HmacSHA256&Signatu
 8) 签名时所带Host应与请求接口时Host相同
 9) Api Key 与 Secret Key中是否存在隐藏特殊字符，影响签名
 
-- 当前官方已支持Java、Python3、C++三种语言的SDK， 可根据语言选择使用或进行参考。 
-<a href='https://github.com/HuobiRDCenter'>SDK下载地址 </a> 
-[[https://github.com/HuobiRDCenter | SDK下载地址]]
-- [[ http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/python_signature_demo/ | Python 签名&demo ]]
-- [[ http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/java_signature_demo/ | JAVA 签名&demo ]]
-- [[ http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/cpp_signature_demo/ | CPP 签名&demo ]]
+- 当前官方已支持Java、Python3、C++三种语言的SDK， 可根据语言选择使用或进行参考。  
+<a href='https://github.com/HuobiRDCenter'>SDK下载地址 </a>   
+<a href='http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/python_signature_demo/'>Python签名&demo </a>   
+<a href='http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/java_signature_demo/'>JAVA签名&demo </a>  
+<a href='http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/cpp_signature_demo/'>CPP签名&demo </a>  
 
 - 也可参考签名指导文档：https://huobiapi.github.io/docs/spot/v1/cn/#c64cd15fdc
 
@@ -104,15 +103,15 @@ A： account-id对应用户不同业务账户的ID，可通过/v1/account/accoun
 A： client-order-id作为下单请求标识的一个参数，类型为字符串，长度为64。 此id为用户自己生成，24小时内有效。
 
 ### Q3：如何获取下单数量、金额、小数限制、精度的信息？
-A： 可使用/v1/common/symbols获取相关币对信息， 下单时注意最小下单数量和最小下单金额的区别。  
+A： 可使用/v1/common/symbols获取相关币对信息， 下单时注意最小下单数量和最小下单金额的区别。   
 常见返回错误如下：  
-order-value-min-error: 下单金额小于最小交易额
-order-orderprice-precision-error : 限价单价格精度错误
-order-orderamount-precision-error : 下单数量精度错误
-order-limitorder-price-max-error : 限价单价格高于限价阈值
-order-limitorder-price-min-error : 限价单价格低于限价阈值
-order-limitorder-amount-max-error : 限价单数量高于限价阈值
-order-limitorder-amount-min-error : 限价单数量低于限价阈值
+order-value-min-error: 下单金额小于最小交易额  
+order-orderprice-precision-error : 限价单价格精度错误  
+order-orderamount-precision-error : 下单数量精度错误  
+order-limitorder-price-max-error : 限价单价格高于限价阈值  
+order-limitorder-price-min-error : 限价单价格低于限价阈值  
+order-limitorder-amount-max-error : 限价单数量高于限价阈值  
+order-limitorder-amount-min-error : 限价单数量低于限价阈值  
 
 ### Q4：WebSocket 订单更新推送主题orders.$symbol 和 orders.$symbo.update的区别？
 A： 区别如下：
@@ -139,30 +138,30 @@ A: match-id表示订单在撮合中的顺序号，trade-id表示成交时的序�
 A：因安全考虑，API创建提币时仅支持已在提现地址列表中的地址，暂不支持使用API添加地址至提币地址列表中，需在网页端或APP端添加地址后才可在API中进行提币操作。
 
 ### Q2：为什么USDT提币时返回Invaild-Address错误？
-A：USDT币种为典型的一币多链币种， 创建提币订单时应填写chain参数对应地址类型，若不填写该字段时，使用该币种的默认链作为chain参数，如果提现时未传chain字段（当前默认chain为usdterc20），提现地址输入OMNI地址，则会返回该错误。
-chain参数可使用值请参考/v2/reference/currencies接口。
-接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2
+A：USDT币种为典型的一币多链币种， 创建提币订单时应填写chain参数对应地址类型，若不填写该字段时，使用该币种的默认链作为chain参数，如果提现时未传chain字段（当前默认chain为usdterc20），提现地址输入OMNI地址，则会返回该错误。  
+chain参数可使用值请参考/v2/reference/currencies接口。  
+接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2  
 
 ### Q3：创建提币时fee字段应该怎么填？
-A：请参考/v2/reference/currencies接口返回值，返回信息中withdrawFeeType为提币手续费类型，根据类型选择对应字段设置提币手续费。
-提币手续费类型包含：
-transactFeeWithdraw : 单次提币手续费（仅对固定类型有效，withdrawFeeType=fixed）	
-minTransactFeeWithdraw : 最小单次提币手续费（仅对区间类型有效，withdrawFeeType=circulated）	
-maxTransactFeeWithdraw : 最大单次提币手续费（仅对区间类型和有上限的比例类型有效，withdrawFeeType=circulated or ratio）	
-transactFeeRateWithdraw :  单次提币手续费率（仅对比例类型有效，withdrawFeeType=ratio）	
-接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2
+A：请参考/v2/reference/currencies接口返回值，返回信息中withdrawFeeType为提币手续费类型，根据类型选择对应字段设置提币手续费。  
+提币手续费类型包含：  
+transactFeeWithdraw : 单次提币手续费（仅对固定类型有效，withdrawFeeType=fixed）  	
+minTransactFeeWithdraw : 最小单次提币手续费（仅对区间类型有效，withdrawFeeType=circulated）  	
+maxTransactFeeWithdraw : 最大单次提币手续费（仅对区间类型和有上限的比例类型有效，withdrawFeeType=circulated or ratio）  	
+transactFeeRateWithdraw :  单次提币手续费率（仅对比例类型有效，withdrawFeeType=ratio）  	
+接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2  
 
 ### Q4：如何查看我的提币额度？
-A：请参考/v2/account/withdraw/quota接口返回值，返回信息中包含您查询币种的单次、当日、当前、总提币额度以及剩余额度的信息。
-接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2-3
-备注：若您有大额提币需求，且提币数额超出相关限额，可联系官方客服（发送信息至support@huobi.pro邮箱）进行沟通。
+A：请参考/v2/account/withdraw/quota接口返回值，返回信息中包含您查询币种的单次、当日、当前、总提币额度以及剩余额度的信息。  
+接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2-3  
+备注：若您有大额提币需求，且提币数额超出相关限额，可联系官方客服（发送信息至support@huobi.pro邮箱）进行沟通。  
 
 ## API技术支持
-若以上内容任未帮助到您，可选择以下任一方式联系我们：
+若以上内容任未帮助到您，可选择以下任一方式联系我们：  
 1. 加入官方QQ群（火币网API交流群(8) 595882031），进群时请注明UID 和编程语言。
 2. 发送邮件至api_service@huobi.com    
-邮件渠道问题反馈模板
-为了能够更快的了解和调查您反馈的问题，请按照如下模板向我们反馈问题。
+邮件渠道问题反馈模板  
+为了能够更快的了解和调查您反馈的问题，请按照如下模板向我们反馈问题。  
 
 ```
 1. UID：
