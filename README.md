@@ -12,5 +12,15 @@
  <a href='https://github.com/huobiwangyuzhi/My-API-project/blob/master/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8.md'>内容详见链接文档 </a> 
 ## 常见问题
  <a href='https://github.com/huobiwangyuzhi/My-API-project/blob/master/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98.md'>内容详见链接文档 </a> 
-## 接口详情
+## 基础信息
+## 行情数据
+## 账户相关
+## 钱包（充值与提现）
+## 现货/杠杆交易
+## 借贷（逐仓杠杆）
+## 借贷（全仓杠杆）
+## Websocket行情数据
+## Websocket资产及订单
+## 稳定币兑换
+## ETF（HB10）
  <a href='https://github.com/huobiwangyuzhi/My-API-project/blob/master/%E6%8E%A5%E5%8F%A3%E8%AF%A6%E6%83%85.md'>内容详见链接文档 </a> 
