@@ -13,4 +13,4 @@
 ## 常见问题
  <a href='https://github.com/huobiwangyuzhi/My-API-project/blob/master/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98.md'>内容详见链接文档 </a> 
 ## 接口详情
- <a href='https://github.com/huobiwangyuzhi/My-API-project/blob/master/%E5%B8%B8%E7%94%A8FAQs.md'>内容详见链接文档 </a> 
+ <a href='https://github.com/huobiwangyuzhi/My-API-project/blob/master/%E6%8E%A5%E5%8F%A3%E8%AF%A6%E6%83%85.md'>内容详见链接文档 </a> 
