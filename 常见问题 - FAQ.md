@@ -155,68 +155,66 @@ A: There are two types of transaction fee, filled-fees and filled-points, and th
 A: The `match-id` is the identity for order matching, the `trade-id` is the identity for the transaction. One `match-id` may be correlated with multiple `trade-id`, or no `trade-id`( the order is cancelled).
 
 ## Account Deposit and Withdraw
-### Q1：为什么创建提币时返回api-not-support-temp-addr错误？
-A：因安全考虑，API创建提币时仅支持已在提现地址列表中的地址，暂不支持使用API添加地址至提币地址列表中，需在网页端或APP端添加地址后才可在API中进行提币操作。
+### Q1：Why the API return error 'api-not-support-temp-addr' when withdraw?
+A：In order for safe purpose, the withdraw API only support the address in withdraw address list. Right now the address can be updated in website or mobile App manually, the address can NOT be updated by API.
 
-### Q2：为什么USDT提币时返回Invaild-Address错误？
-A：USDT币种为典型的一币多链币种， 创建提币订单时应填写chain参数对应地址类型，若不填写该字段时，使用该币种的默认链作为chain参数，如果提现时未传chain字段（当前默认chain为usdterc20），提现地址输入OMNI地址，则会返回该错误。  
-chain参数可使用值请参考/v2/reference/currencies接口。  
-接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2  
+### Q2：Why the API return error 'Invaild-Address' when withdraw USDT?
+A：The USDT has multiple chains, therefore the withdraw order request should contains the chain parameter. If the target chain is `OMNI` or `TRX`, the chain parameter should be `usdt` or `trc20usdt`, otherwise you will be this error.
+The available chain name can be retreived from API `/v2/reference/currencies`
+Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2
 
-### Q3：创建提币时fee字段应该怎么填？
-A：请参考/v2/reference/currencies接口返回值，返回信息中withdrawFeeType为提币手续费类型，根据类型选择对应字段设置提币手续费。  
-提币手续费类型包含：     
-transactFeeWithdraw : 单次提币手续费（仅对固定类型有效，withdrawFeeType=fixed）    	
-minTransactFeeWithdraw : 最小单次提币手续费（仅对区间类型有效，withdrawFeeType=circulated）   	
-maxTransactFeeWithdraw : 最大单次提币手续费（仅对区间类型和有上限的比例类型有效，withdrawFeeType=circulated or ratio）  	
-transactFeeRateWithdraw :  单次提币手续费率（仅对比例类型有效，withdrawFeeType=ratio）       	
-接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2   
+### Q3：How to assign parameter 'fee' when create withdraw request?
+A：Please refer to the response from API `/v2/reference/currencies`, the response field `withdrawFeeType` is the fee type, and the fee should be  assigned according to different fee type: 
+transactFeeWithdraw : The fee per time (only applicable for fixed type, withdrawFeeType=fixed）    	
+minTransactFeeWithdraw : The minimum fee per time (only applicable for circulated type, withdrawFeeType=circulated)
+maxTransactFeeWithdraw : The maximum fee per time (only applicable for circulated or ratio type)	
+transactFeeRateWithdraw :  The fee ratio per time (only applicable for ratio type，withdrawFeeType=ratio)   Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2   
 
-### Q4：如何查看我的提币额度？
-A：请参考/v2/account/withdraw/quota接口返回值，返回信息中包含您查询币种的单次、当日、当前、总提币额度以及剩余额度的信息。  
-接口文档地址：https://huobiapi.github.io/docs/spot/v1/cn/#apiv2-3  
-备注：若您有大额提币需求，且提币数额超出相关限额，可联系官方客服（发送信息至support@huobi.pro邮箱）进行沟通。  
+### Q4：How to query my withdraw quota?
+A：Please check the response fields from API `/v2/account/withdraw/quota`, they contain the quota for once, current day, current time, total and remaining.
+接口文档地址: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2-3  
+Note: If you need to withdraw large amount and it reaches the limitation, you can contact our official support (for example, send email to support@huobi.pro).
 
 ## API Technical Support
-若以上内容任未帮助到您，可选择以下任一方式联系我们：  
-1. 加入官方QQ群（火币网API交流群(8) 595882031），进群时请注明UID 和编程语言。
-2. 发送邮件至api_service@huobi.com    
-邮件渠道问题反馈模板  
-为了能够更快的了解和调查您反馈的问题，请按照如下模板向我们反馈问题。  
+If you have any other questions on API, you can contact us by below ways:
+1. Join official QQ group (火币网API交流群(8), 595882031), please tell your UID and programming language in your join request.
+2. Send email to api_service@huobi.com
+In order to better understand your question and respond you quickly, please use below template in your email:
 
 ```
-1. UID：
-2. Api Key（AccessKeyId）：
-3. 完整请求URL：
-4. 请求参数：
-5. 请求时间点：
-6. 接口返回原始数据：
-7. 问题说明：（例如操作步骤，字段疑问，问题发生频率）
-8. 签名前字符串（签名认证错误时必填）：
-
-
-注意：Api Key仅能证明您的身份，不会影响您账户的安全，切记不要将Secret Key信息反馈出来，若您不小心将Secret Key暴露，请尽快删除该Api Key，若因此造成您的账户损失我们概不负责。
-
+1. UID:
+2. Api Key (AccessKeyId):
+3. Full URL request:
+4. Request parameters:
+5. Request time:
+6. Original response:
+7. Problem description: (such as steps, field question, frequency)
+8. Signature text (mandatory if you have signature authentication issue):
 ```
-Example：
+
+
+
+
+Belwo is an example：
 
 ```
 1. UID：123456
-2. Api Key（AccessKeyId）：rfhxxxxx-950000847-boooooo3-432c0
-3. 完整请求URL： https://api.huobi.pro/v1/account/accounts?&SignatureVersion=2&SignatureMethod=HmacSHA256&Timestamp=2019-11-06T03%3A25%3A39&AccessKeyId=rfhxxxxx-950000847-boooooo3-432c0&Signature=HhJwApXKpaLPewiYLczwfLkoTPnFPHgyF61iq0iTFF8%3D
-4. 请求参数：无
-5. 请求时间点：2019-11-06 11:26:14
-6. 接口返回原始数据：{"status":"error","err-code":"api-signature-not-valid","err-msg":"Signature not valid: Incorrect Access key [Access key错误]","data":null}
-7. 问题说明：调用接口时发生了错误
-8. 签名前字符串（签名认证错误时必填）：
+2. Api Key (AccessKeyId):rfhxxxxx-950000847-boooooo3-432c0
+3. Full URL request: https://api.huobi.pro/v1/account/accounts?&SignatureVersion=2&SignatureMethod=HmacSHA256&Timestamp=2019-11-06T03%3A25%3A39&AccessKeyId=rfhxxxxx-950000847-boooooo3-432c0&Signature=HhJwApXKpaLPewiYLczwfLkoTPnFPHgyF61iq0iTFF8%3D
+4. Request parameters: N/A
+5. Request time: 2019-11-06 11:26:14
+6. Original response：{"status":"error","err-code":"api-signature-not-valid","err-msg":"Signature not valid: Incorrect Access key [Access key错误]","data":null}
+7. Problem description: API returns error
+8. Signature text:
 GET\n
 api.huobi.pro\n
 /v1/account/accounts\n
 AccessKeyId=rfhxxxxx-950000847-boooooo3-432c0&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2019-11-06T03%3A26%3A13
-
-注意：Api Key仅能证明您的身份，不会影响您账户的安全，切记不要将Secret Key信息反馈出来，若您不小心将Secret Key暴露，请尽快删除该Api Key，若因此造成您的账户损失我们概不负责。
-
 ```
+
+
+
+Note：It is safe to share your API Key, which is to prove your identity, and it will not affect your account safety. Remember do **not** share your `Secret Key` to any one. If you expose your `Secret Key` by accident, please remove your API Key immediately, in this case we will not be responsible for your account issue.
 
 ----------------
 
