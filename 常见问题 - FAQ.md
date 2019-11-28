@@ -134,7 +134,7 @@ order-limitorder-price-min-error : The limited order prices is lower than the th
 order-limitorder-amount-max-error : The limited order amount is larger than the threshold
 order-limitorder-amount-min-error : The limited order amount is smaller than the threshold  
 
-### Q4：What is the difference between two WebSocket topic 'orders.\$symbol' and 'orders.$symbol.update'?
+### Q4：What is the difference between two WebSocket topic 'orders.\$symbol' and 'orders.\$symbol.update'?
 A： Below are the difference:
 1. The topic `order.$symbol` is the legacy version, we will not update and support in the future, it is suggested to use topic `orders.$symbol.update`.
 2. The notification from new topic `orders.$symbol.update` is ordered by time, which follow the orders matching time, and it has lower latency.
