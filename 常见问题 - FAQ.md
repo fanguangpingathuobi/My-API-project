@@ -169,6 +169,7 @@ A：The USDT has multiple chains, therefore the withdraw order request should co
 | TRX             | `trc20usdt`     |
 
 If the chain parameter is empty, default target chain is `ERC20`. Or you can explicitly set the chain parameter to `usdterc20`.
+
 If the target chain is `OMNI` or `TRX`, the chain parameter should be `usdt` or `trc20usdt`.
 The available chain name can be retreived from API `/v2/reference/currencies`
 
