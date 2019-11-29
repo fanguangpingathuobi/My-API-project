@@ -183,7 +183,7 @@ In order to better understand your question and respond you quickly, please use 
 
 ```
 1. UID:
-2. Api Key (AccessKeyId):
+2. AccessKey:
 3. Full URL request:
 4. Request parameters:
 5. Request time:
@@ -199,7 +199,7 @@ Belwo is an example：
 
 ```
 1. UID：123456
-2. Api Key (AccessKeyId):rfhxxxxx-950000847-boooooo3-432c0
+2. AccessKey:rfhxxxxx-950000847-boooooo3-432c0
 3. Full URL request: https://api.huobi.pro/v1/account/accounts?&SignatureVersion=2&SignatureMethod=HmacSHA256&Timestamp=2019-11-06T03%3A25%3A39&AccessKeyId=rfhxxxxx-950000847-boooooo3-432c0&Signature=HhJwApXKpaLPewiYLczwfLkoTPnFPHgyF61iq0iTFF8%3D
 4. Request parameters: N/A
 5. Request time: 2019-11-06 11:26:14
@@ -214,7 +214,7 @@ AccessKeyId=rfhxxxxx-950000847-boooooo3-432c0&SignatureMethod=HmacSHA256&Signatu
 
 
 
-Note：It is safe to share your API Key, which is to prove your identity, and it will not affect your account safety. Remember do **not** share your `Secret Key` to any one. If you expose your `Secret Key` by accident, please remove your API Key immediately, in this case we will not be responsible for your account issue.
+Note：It is safe to share your Access Key, which is to prove your identity, and it will not affect your account safety. Remember do **not** share your `Secret Key` to any one. If you expose your `Secret Key` by accident, please [remove](https://www.hbg.com/zh-cn/apikey/) the related API Key immediately.
 
 ----------------
 
