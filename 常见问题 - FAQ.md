@@ -73,7 +73,7 @@ order-id=1234567890
 9) The hidden text in API Key and Secret Key may have impact on the signature.
 
 - Right now the official SDK supports 3 language: Java, Python3 and C++, you can choose the one that suitable for you.
-<a href='https://github.com/HuobiRDCenter'>Download SDK </a> 
+<a href='https://github.com/HuobiRDCenter'>Download SDK </a> 
 <a href='python_signature_demo.md'>Python sigature demo</a>
 <a href='java_signature_demo.md'>JAVA signature demo</a>
 <a href='cpp_signature_demo.md'>C++ signature demo</a>
@@ -131,7 +131,7 @@ Below are common errors:
 - order-orderprice-precision-error : The precision for limited order price is wrong 
 - order-orderamount-precision-error : The precision for limited order amount is wrong
 - order-limitorder-price-max-error : The limited order price is higher than the threshold
-- order-limitorder-price-min-error : The limited order prices is lower than the threshold
+- order-limitorder-price-min-error : The limited order price is lower than the threshold
 - order-limitorder-amount-max-error : The limited order amount is larger than the threshold
 - order-limitorder-amount-min-error : The limited order amount is smaller than the threshold  
 
