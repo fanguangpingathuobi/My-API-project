@@ -61,8 +61,8 @@ order-id=1234567890
 
 2) The signature text should be URI encoded, for example
 
-> The semicolon `:`should be encoded as `%3A`, The space should be encoded as `%20`.
-> The timestamp should be formated as `YYYY-MM-DDThh:mm:ss` and after encoded it should be like `2017-05-11T15%3A19%3A30`  
+- The semicolon `:`should be encoded as `%3A`, The space should be encoded as `%20`.
+- The timestamp should be formated as `YYYY-MM-DDThh:mm:ss` and after encoded it should be like `2017-05-11T15%3A19%3A30`  
 
 3) The signature should be base64 encoded.
 4) The parameter for Get request should be included in signature request.
@@ -82,17 +82,18 @@ order-id=1234567890
 
 ### Q6：Why the API return 'gateway-internal-error'?
 A：Please check below situations:
-1) Check the `account-id`, it should be returned from `GET /v1/account/accounts`.
-2) It may be due to network issue, please try again later.
-3) The data format should be correct (standard JSON).
-4) The `Content-Type` in POST header should be `application/json` 。
+- Check the `account-id`, it should be returned from `GET /v1/account/accounts`.
+- It may be due to network issue, please try again later.
+- The data format should be correct (standard JSON).
+- The `Content-Type` in POST header should be `application/json` .
 
 ### Q7：Why the API return 'login-required'?
 A：Please check below situations:
-1) The parameter should include `AccessKeyId`.
-2) The `account-id` should be returned from `GET /v1/account/accounts`.
-3) The request body in POST should NOT included in signature text.
-4) The request parameter in GET should be ordered by ASCII.
+
+- The parameter should include `AccessKeyId`.
+- The `account-id` should be returned from `GET /v1/account/accounts`.
+- The request body in POST should NOT included in signature text.
+- The request parameter in GET should be ordered by ASCII.
 
 ## Market Data
 ### Q1：What is the update frequency?
@@ -126,13 +127,13 @@ A： The `client-order-id` is one parameter of the place order request, it is st
 ### Q3：How to get the order size, price and decimal precision?
 A： You can call API `/v1/common/symbols` to get the currency pair information, pay attention to the difference between the minimum amount and the minimum price.   
 Below are common errors:
-order-value-min-error: The order price is less than mininum price
-order-orderprice-precision-error : The precision for limited order price is wrong 
-order-orderamount-precision-error : The precision for limited order amount is wrong
-order-limitorder-price-max-error : The limited order price is higher than the threshold
-order-limitorder-price-min-error : The limited order prices is lower than the threshold
-order-limitorder-amount-max-error : The limited order amount is larger than the threshold
-order-limitorder-amount-min-error : The limited order amount is smaller than the threshold  
+- order-value-min-error: The order price is less than mininum price
+- order-orderprice-precision-error : The precision for limited order price is wrong 
+- order-orderamount-precision-error : The precision for limited order amount is wrong
+- order-limitorder-price-max-error : The limited order price is higher than the threshold
+- order-limitorder-price-min-error : The limited order prices is lower than the threshold
+- order-limitorder-amount-max-error : The limited order amount is larger than the threshold
+- order-limitorder-amount-min-error : The limited order amount is smaller than the threshold  
 
 ### Q4：What is the difference between two WebSocket topic 'orders.\$symbol' and 'orders.\$symbol.update'?
 A： Below are the difference:
@@ -174,10 +175,10 @@ Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2
 
 ### Q3：How to assign parameter 'fee' when create withdraw request?
 A：Please refer to the response from API `/v2/reference/currencies`, the response field `withdrawFeeType` is the fee type, and the fee should be  assigned according to different fee type: 
-transactFeeWithdraw : The fee per time (only applicable for fixed type, withdrawFeeType=fixed）    	
-minTransactFeeWithdraw : The minimum fee per time (only applicable for circulated type, withdrawFeeType=circulated)
-maxTransactFeeWithdraw : The maximum fee per time (only applicable for circulated or ratio type)	
-transactFeeRateWithdraw :  The fee ratio per time (only applicable for ratio type，withdrawFeeType=ratio)   Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2   
+- transactFeeWithdraw : The fee per time (only applicable for fixed type, withdrawFeeType=fixed）    	
+- minTransactFeeWithdraw : The minimum fee per time (only applicable for circulated type, withdrawFeeType=circulated)
+- maxTransactFeeWithdraw : The maximum fee per time (only applicable for circulated or ratio type)	
+- transactFeeRateWithdraw :  The fee ratio per time (only applicable for ratio type，withdrawFeeType=ratio)   Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2   
 
 ### Q4：How to query my withdraw quota?
 A：Please check the response fields from API `/v2/account/withdraw/quota`, they contain the quota for once, current day, current time, total and remaining.
