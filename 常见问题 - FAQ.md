@@ -74,9 +74,9 @@ order-id=1234567890
 
 - Right now the official SDK supports 3 language: Java, Python3 and C++, you can choose the one that suitable for you.
 <a href='https://github.com/HuobiRDCenter'>Download SDK </a> 
-<a href='http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/python_signature_demo/'>Python sigature demo</a>
-<a href='http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/java_signature_demo/'>JAVA signature demo</a>
-<a href='http://phabricator.huobidev.com/w/ams/dailylog/duqingxiang/api_qaqa/cpp_signature_demo/'>C++ signature demo</a>
+<a href='python_signature_demo.md'>Python sigature demo</a>
+<a href='java_signature_demo.md'>JAVA signature demo</a>
+<a href='cpp_signature_demo.md'>C++ signature demo</a>
 
 - You can also refer to the signature guide: https://huobiapi.github.io/docs/spot/v1/cn/#c64cd15fdc
 
