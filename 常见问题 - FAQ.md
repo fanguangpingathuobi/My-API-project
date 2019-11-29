@@ -3,9 +3,9 @@
 ## API Announcements
 Huobi will publish API announcement in advance for any API change, please subscribe our announcements so that you can get latest update. 
 
-How to subscribe: Login to API Announcements page, click "Follow" button in the top right of the page, then choose the type you want to follow. After you subscribe, the button will changed to "Following". If you don't have any account, you need to register first. 
-
 You can click <a href='https://huobiglobal.zendesk.com/hc/en-us/sections/360000070201-API-Announcements'>Here </a>  to subscribe the announcements.
+
+How to subscribe: Login to API Announcements page, click "Follow" button in the top right of the page, then choose the type you want to follow. After you subscribe, the button will changed to "Following". If you don't have any account, you need to register first. 
 
 ## Access and Authentication
 
