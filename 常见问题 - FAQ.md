@@ -159,7 +159,16 @@ A: The `match-id` is the identity for order matching, the `trade-id` is the iden
 A：In order for safe purpose, the withdraw API only support the address in withdraw address list. Right now the address can be updated in website or mobile App manually, the address can NOT be updated by API.
 
 ### Q2：Why the API return error 'Invaild-Address' when withdraw USDT?
-A：The USDT has multiple chains, therefore the withdraw order request should contains the chain parameter. If the target chain is `OMNI` or `TRX`, the chain parameter should be `usdt` or `trc20usdt`, otherwise you will be this error.
+A：The USDT has multiple chains, therefore the withdraw order request should contains the chain parameter. Below tables the relationship between the Chain and the chain parameter:
+
+| Chain           | chain parameter |
+| --------------- | --------------- |
+| ERC20 (default) | `usdterc20`     |
+| OMNI            | `usdt`          |
+| TRX             | `trc20usdt`     |
+
+If the chain parameter is empty, default target chain is `ERC20`. Or you can explicitly set the chain parameter to `usdterc20`.
+If the target chain is `OMNI` or `TRX`, the chain parameter should be `usdt` or `trc20usdt`.
 The available chain name can be retreived from API `/v2/reference/currencies`
 Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2
 
