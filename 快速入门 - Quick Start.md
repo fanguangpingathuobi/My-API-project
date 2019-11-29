@@ -1,35 +1,33 @@
-# 快速入门
+# Quick Start
 
-## 接入准备
+## Preparation
 
-如需使用API ，请先登录网页端，完成API key的申请和权限配置，再据此文档详情进行开发和交易。  
+Before you use API, you need to login the website to create API Key with proper permissions.
 
-您可以点击 <a href='https://www.hbg.com/zh-cn/apikey/'>这里 </a> 创建 API Key。
+You can manage your API Key <a href='https://www.hbg.com/zh-cn/apikey/'>here</a>.
 
-每个母账号可创建5组Api Key，每个Api Key可对应设置读取、交易、提币三种权限。  
+Every account can create at most 5 API Key, each of them has three permissions:
 
-权限说明如下：
+- Read permission: It is used to query the data, such as order query, trade query.
+- Trade permission: It is used to create order, cancel order and transfer, etc.
+- Withdraw permission: It is used to create withdraw order, cancel withdraw order, etc.
 
-- 读取权限：读取权限用于对数据的查询接口，例如：订单查询、成交查询等。
-- 交易权限：交易权限用于下单、撤单、划转类接口。
-- 提币权限：提币权限用于数字货币创建提币定点、取消提币订单操作。
+Please remember below information after creation:
 
-创建成功后请务必记住以下信息：
-
-- `Access Key`  API 访问密钥
+- `Access Key`  It is used in API request
   
-- `Secret Key`  签名认证加密所使用的密钥（仅申请时可见）
+- `Secret Key`  It is used to generate the signature (only visible once after creation)
 
 <aside class="notice">
-创建 API Key 时可以绑定 IP 地址，未绑定 IP 地址的 API Key 有效期为90天。出于安全考虑，强烈建议您绑定 IP 地址。
+The API Key can bind one or more IP addresses, we strongly suggest you bind IP address for security purpose. The API Key without IP binding will be expired after 90 days.
 </aside>
 <aside class="warning">
-风险提示：这两个密钥与账号安全紧密相关，无论何时都请勿向其它人透露。API Key的泄露可能会造成您的资产损失（即使未开通提币权限），若发现API Key泄露请尽快删除该API Key。
+<red><b>Warning</b></red>: These two keys are important to your account safety, please don't share <b>both</b> of them together to anyone else. If you find your API Key is disposed, please remove it immediately.
 </aside> 
 
-## SDK与代码示例
+## SDK and Demo
 
-**SDK（推荐）**
+**SDK (Suggested)**
 
 [Java](https://github.com/huobiapi/huobi_Java)
 
@@ -41,34 +39,34 @@
 
 https://github.com/huobiapi?tab=repositories
 
-## 接口类型
+## Interface Type
 
-火币为用户提供两种接口，您可根据自己的使用场景和偏好来选择适合的方式进行查询行情、交易或提现。  
+There are two types of interfac, you can choose the proper one according to your scenario and preferences.
 
 ### REST API
 
-REST，即Representational State Transfer的缩写，是目前最流行的一种互联网软件架构。在RESTful架构中，每一个URL代表一种资源。    
+REST (Representational State Transfer) is one of the most popular communication mechanism under HTTP, each URL represents a type of resource.
 
-交易或资产提现等操作，建议开发者使用REST API进行操作。  
+It is suggested to use Rest API for one-off operation, like trading and withdraw.
 
 ### WebSocket API
 
-WebSocket是HTML5一种新的协议（Protocol）。它实现了客户端与服务器全双工通信，通过一次简单的握手就可以建立客户端和服务器连接，服务器可以根据业务规则主动推送信息给客户端。
+WebSocket is a new protocol in HTML5. It is full-duplex between client and server. The connection can be established by a single handshake, and then server can push the notification to client actively.
 
-市场行情和买卖深度等信息，建议开发者使用WebSocket API进行获取。
+It is suggest to use WebSocket API to get data updae, like market data and order update.
 
-**接口鉴权**
+**Authentication**
 
-以上两种接口均包含公共接口和私有接口两种类型。  
+Both API has two levels of authentication:
 
-公共接口可用于获取基础信息和行情数据。公共接口无需认证即可调用。  
+Public API: It is for basic information and market data. It doesn't need authentication.
 
-私有接口可用于交易管理和账户管理。每个私有请求必须使用您的API key进行签名验证。
+Private API: It is for account related operation like trading and account management. Each private API must be authenticated with API Key.
 
-## 接入URLs
-您可以自行比较使用api.huobi.pro和api-aws.huobi.pro两个域名的延迟情况，选择延迟低的进行使用。     
+## Access URLs
+You can compare the network latency between two domain <u>api.huobi.pro</u> and <u>api-aws.huobi.pro</u>, and then choose the better one for you.
 
-其中，api-aws.huobi.pro域名对使用aws云服务的用户做了一定的链路延迟优化。  
+In general, the domain <u>api-aws.huobi.pro</u> is optimized for AWS client, the latency will be lower.
 
 **REST API**
 
@@ -76,56 +74,53 @@ WebSocket是HTML5一种新的协议（Protocol）。它实现了客户端与服�
 
 **`https://api-aws.huobi.pro`**  
 
-**Websocket Feed（行情）**
+**Websocket Feed (market)**
 
 **`wss://api.huobi.pro/ws`**  
 
 **`wss://api-aws.huobi.pro/ws`**  
 
-**Websocket Feed（资产和订单）**
+**Websocket Feed (account and order)**
 
 **`wss://api.huobi.pro/ws/v1`**  
 
 **`wss://api-aws.huobi.pro/ws/v1`**     
 
 <aside class="notice">
-请使用中国大陆以外的 IP 访问火币 API。
+Please initiate API calls with non-China IP.
 </aside>
 <aside class="notice">
-鉴于延迟高和稳定性差等原因，不建议通过代理的方式访问火币API。
+It is not recommended to use proxy to access Huobi API because it will introduce high latency and low stability.
 </aside>
 <aside class="notice">
-为保证API服务的稳定性，建议使用日本AWS云服务器进行访问。如使用中国大陆境内的客户端服务器，连接的稳定性将难以保证。 
+It is recommended to access Huobi API from AWS Japan for better stability. If your server is in China mainland, it may be not stable.
 </aside> 
 
-## 签名认证
+## Authentication
 
-### 签名说明
+### Overview
 
-API 请求在通过 internet 传输的过程中极有可能被篡改，为了确保请求未被更改，除公共接口（基础信息，行情数据）外的私有接口均必须使用您的 API Key 做签名认证，以校验参数或参数值在传输途中是否发生了更改。  
-每一个API Key需要有适当的权限才能访问相应的接口，每个新创建的API Key都需要分配权限。在使用接口前，请查看每个接口的权限类型，并确认你的API Key有相应的权限。
+The API request may be tampered during internet, therefore all private API must be signed by your API Key (Secrete Key).
 
-一个合法的请求由以下几部分组成：
+Each API Key has permission property, please check the API permission, and make sure your API key has proper permission.
 
-- 方法请求地址：即访问服务器地址 api.huobi.pro，比如 api.huobi.pro/v1/order/orders。
+A valid request consists of below parts:
 
-- API 访问密钥（AccessKeyId）：您申请的 API Key 中的 Access Key。
+- API Path: for example <u>api.huobi.pro/v1/order/orders</u>
+- API Access Key: The 'Access Key' in your API Key
+- Signature Method: The Hash method that is used to sign, it uses **HmacSHA256**
+- Signature Versio: The version for the signature protocol, it uses **2**
+- Timestamp: The UTC time when the request is sent, e.g. 2017-05-11T16:22:06. It is useful to prevent the request to be intercepted by third-party.
+- Parameters: Each API Method has a group of parameters, you can refer to detailed document for each of them. 
+  - For GET request, all the parameters must be signed.
+  - For POST request, the parameters needn't be signed and they should be put in request body.
+- Signature: The value after signed, it is guarantee the signature is valid and the request is not be tempered.
 
-- 签名方法（SignatureMethod）：用户计算签名的基于哈希的协议，此处使用 HmacSHA256。
+### Signature Method
 
-- 签名版本（SignatureVersion）：签名协议的版本，此处使用2。
+The signature may be different if the request text is different, thereore the request should be normalized before signing. Below signing steps take the order query as an example:
 
-- 时间戳（Timestamp）：您发出请求的时间 (UTC 时间)  。如：2017-05-11T16:22:06。在查询请求中包含此值有助于防止第三方截取您的请求。
-
-- 必选和可选参数：每个方法都有一组用于定义 API 调用的必需参数和可选参数。可以在每个方法的说明中查看这些参数及其含义。 请一定注意：对于 GET 请求，每个方法自带的参数都需要进行签名运算； 对于 POST 请求，每个方法自带的参数不进行签名认证，即 POST 请求中需要进行签名运算的只有 AccessKeyId、SignatureMethod、SignatureVersion、Timestamp 四个参数，其它参数放在 body 中。
-
-- 签名：签名计算得出的值，用于确保签名有效和未被篡改。
-
-### 签名步骤
-
-规范要计算签名的请求 因为使用 HMAC 进行签名计算时，使用不同内容计算得到的结果会完全不同。所以在进行签名计算前，请先对请求进行规范化处理。下面以查询某订单详情请求为例进行说明：
-
-查询某订单详情时完整的请求URL
+This is a full URL to query one order:
 
 `https://api.huobi.pro/v1/order/orders?`
 
@@ -139,25 +134,26 @@ API 请求在通过 internet 传输的过程中极有可能被篡改，为了确
 
 `&order-id=1234567890`
 
-#### 1. 请求方法（GET 或 POST），后面添加换行符 “\n”
+#### 1. The request Method (GET or POST), append line break “\n”
 
 
 `GET\n`
 
-#### 2. 添加小写的访问地址，后面添加换行符 “\n”
+#### 2. The host with lower case, append line break “\n”
 
 `
 api.huobi.pro\n
 `
 
-#### 3. 访问方法的路径，后面添加换行符 “\n”
+#### 3. The path, append line break “\n”
 
 `
 /v1/order/orders\n
 `
 
-#### 4. 按照ASCII码顺序对参数名进行排序，且进行URI编码，例如，下面是请求参数的原始顺序，且进行URI编码后
+#### 4. The parameters are URI encoded, and ordered by ASCII
 
+For example below is the original parameters:
 
 `AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx`
 
@@ -170,14 +166,14 @@ api.huobi.pro\n
 `Timestamp=2017-05-11T15%3A19%3A30`
 
 <aside class="notice">
-使用 UTF-8 编码，且进行了 URI 编码，十六进制字符必须大写，如 “:” 会被编码为 “%3A” ，空格被编码为 “%20”。
+Use UTF-8 encoding and URI encoded, the hex must be upper case. For example, The semicolon ':' should be encoded as '%3A', The space should be encoded as '%20'.
 </aside>
 <aside class="notice">
-时间戳（Timestamp）需要以YYYY-MM-DDThh:mm:ss格式添加并且进行 URI 编码。
+The 'timestamp' should be formated as 'YYYY-MM-DDThh:mm:ss' and URI encoded.
 </aside>
 
+Then above parameter should be ordered like below:
 
-#### 5. 经过排序之后
 
 `AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx`
 
@@ -189,12 +185,12 @@ api.huobi.pro\n
 
 `order-id=1234567890`
 
-#### 6. 按照以上顺序，将各参数使用字符 “&” 连接
+#### 5. Use char  “&” to concatenate all parameters
 
 
 `AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2017-05-11T15%3A19%3A30&order-id=1234567890`
 
-#### 7. 组成最终的要进行签名计算的字符串如下
+#### 6. Assemble the pre-signed text
 
 `GET\n`
 
@@ -205,64 +201,63 @@ api.huobi.pro\n
 `AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2017-05-11T15%3A19%3A30&order-id=1234567890`
 
 
-#### 8. 用上一步里生成的 “请求字符串” 和你的密钥 (Secret Key) 生成一个数字签名
+#### 7. Use the pre-signed text and your Secret Key to generate a signature
+
+1. Use the pre-signed text in above step and your API Secret Key to generate hash code by HmacSHA256 hash function.
+2. Encode the hash code with base-64 to generate the signature.
 
 `4F65x5A2bLyMWVQj3Aqp+B4w+ivaA7n5Oi2SuYtCJ9o=`
 
-1. 将上一步得到的请求字符串和 API 私钥作为两个参数，调用HmacSHA256哈希函数来获得哈希值。
+#### 8. Put the signature into request URL
 
-2. 将此哈希值用base-64编码，得到的值作为此次接口调用的数字签名。
+1. Put all the prameter in the URL
 
-#### 9. 将生成的数字签名加入到请求的路径参数里
+2. Append the signature in the URL, with parameter name “Signature”.
 
-最终，发送到服务器的 API 请求应该为
+Finall, the request sent to API should be:
 
 `https://api.huobi.pro/v1/order/orders?AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx&order-id=1234567890&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2017-05-11T15%3A19%3A30&Signature=4F65x5A2bLyMWVQj3Aqp%2BB4w%2BivaA7n5Oi2SuYtCJ9o%3D`
 
-1. 把所有必须的认证参数添加到接口调用的路径参数里
+## Sub Account
 
-2. 把数字签名在URL编码后加入到路径参数里，参数名为“Signature”。
+Sub account can be used to isolate the assets and trade, the assets can be transferred between parent and sub account. Sub account can only trade within the sub account. The assets can not be transferred between sub accounts, only parent account has the transfer permission.  
 
-## 子账号
+Sub account has independent login password and API Key, they are managed under parent account in website.
 
-子账号可以用来隔离资产与交易，资产可以在母子账号之间划转；子账号用户只能在子账号内进行交易，并且子账号之间资产不能直接划转，只有母账号有划转权限。  
+Each parent account can create **200** sub accounts, each sub account can create at most **5** API Key, each API key can have either of two permissions: **read** and **trade**.
 
-子账号拥有独立的登录账号密码和 API Key，均由母账号在网页端进行管理。 
+The sub account API Key can also bind IP address, the expiry policy is the same with parent account.
 
-每个母账号可创建200个子账号，每个子账号可创建5组Api Key，每个Api Key可对应设置读取、交易两种权限。
+You can access <a href='https://account.hbg.com/en-us/subaccount/management'>here</a> to create and manage sub account.
 
-子账号的 API Key 也可绑定 IP 地址, 有效期的限制与母账号的API Key一致。
+The sub account can access all public API (including basic information and market data), below are the private APIs that sub account can access:
 
-您可以点击 <a href='https://account.hbg.com/zh-cn/subaccount/management/'>这里 </a> 创建子账号并管理。  
-
-子账号可以访问所有公共接口，包括基本信息和市场行情，子账号可以访问的私有接口如下：
-
-接口|说明|
-----------------------|---------------------|
-[POST /v1/order/orders/place](#fd6ce2a756)	|创建并执行订单|
-[POST /v1/order/orders/{order-id}/submitcancel](#4e53c0fccd)	|撤销一个订单|
-[POST /v1/order/orders/batchcancel](#ad00632ed5)	|批量撤销订单|
-[POST /v1/order/orders/batchCancelOpenOrders](#open-orders)	|撤销当前委托订单|
-[GET /v1/order/orders/{order-id}](#92d59b6aad)	|查询一个订单详情|
-[GET /v1/order/orders](#d72a5b49e7)	|查询当前委托、历史委托|
-[GET /v1/order/openOrders](#95f2078356)	|查询当前委托订单|
-[GET /v1/order/matchresults](#0fa6055598)	|查询成交|
-[GET /v1/order/orders/{order-id}/matchresults](#56c6c47284)	|查询某个订单的成交明细|
-[GET /v1/account/accounts](#bd9157656f)	|查询当前用户的所有账户|
-[GET /v1/account/accounts/{account-id}/balance](#870c0ab88b)	|查询指定账户的余额|
-[POST /v1/futures/transfer](#e227a2a3e8)	|币币与合约账户间的资金划转|
-[POST /v1/dw/transfer-in/margin](#0d3c2e7382)|从币币交易账户划转至杠杆账户|
-[POST /v1/dw/transfer-out/margin](#0d3c2e7382)|从杠杆账户划转至币币交易账户|
-[POST /v1/margin/orders](#48cca1ce88)|申请借贷|
-[POST /v1/margin/orders/{order-id}/repay](#48aa7c8199)|归还借贷|
-[GET /v1/margin/loan-orders](#e52396720a)|查询借贷记录|
-[GET /v1/margin/accounts/balance](#6e79ba8e80)|查询杠杆账户余额|
+API|Description
+----------------------|---------------------
+[POST /v1/order/orders/place](#fd6ce2a756)	|Create and execute an order
+[POST /v1/order/orders/{order-id}/submitcancel](#4e53c0fccd)	|Cancel an order
+[POST /v1/order/orders/batchcancel](#ad00632ed5)	|Cancel multiple orders
+[POST /v1/order/orders/batchCancelOpenOrders](#open-orders)	|Cancel the open orders
+[GET /v1/order/orders/{order-id}](#92d59b6aad)	|Query a specific order
+[GET /v1/order/orders](#d72a5b49e7)	|Query orders by condition
+[GET /v1/order/openOrders](#95f2078356)	|Query open orders
+[GET /v1/order/matchresults](#0fa6055598)	|Query the order matching result
+[GET /v1/order/orders/{order-id}/matchresults](#56c6c47284)	|Query a specific order matching result
+[GET /v1/account/accounts](#bd9157656f)	|Query all accounts in current user
+[GET /v1/account/accounts/{account-id}/balance](#870c0ab88b)	|Query the specific account balance
+[POST /v1/futures/transfer](#e227a2a3e8)	|Transfer with future account
+[POST /v1/dw/transfer-in/margin](#0d3c2e7382)|Transfer to margin account
+[POST /v1/dw/transfer-out/margin](#0d3c2e7382)|Transfer from margin account
+[POST /v1/margin/orders](#48cca1ce88)|Request debit
+[POST /v1/margin/orders/{order-id}/repay](#48aa7c8199)|Repay the debit for specific order
+[GET /v1/margin/loan-orders](#e52396720a)|Query loan orders
+[GET /v1/margin/accounts/balance](#6e79ba8e80)|Query margin account balance
 
 <aside class="notice">
 其他接口子账号不可访问，如果尝试访问，系统会返回 “error-code 403”。
 </aside>
 
-## 业务字典
+## Glossary
 
 ### 交易对
 
