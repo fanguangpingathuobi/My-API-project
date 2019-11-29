@@ -1,39 +1,39 @@
-# 接入说明
+# API Access
 
-## 接口概览
+## Overview
 
-接口分类| 分类链接 | 概述
+Category| URL Path | Description 
 --------- | --------- | -----------
-基础类 |/v1/common/* | 基础类接口，包括币种、币种对、时间戳等接口
-行情类 |/market/*| 公共行情类接口，包括成交、深度、行情等
-账户类 |/v1/account/*  /v1/subuser/* | 账户类接口，包括账户信息，子用户等
-订单类 |/v1/order/* | 订单类接口，包括下单、撤单、订单查询、成交查询等
-逐仓杠杆类|/v1/margin/* | 逐仓杠杆类接口，包括借贷、还款、查询等
-全仓杠杆类接口| /v1/cross-margin/* | 全仓杠杆类接口，包括借贷、还款、查询等
+Common |/v1/common/* | Common interface, including currency, currency pair, timestamp, etc 
+Market Data |/market/*| Market data interface, including trading, depth, quotation, etc 
+Account |/v1/account/*  /v1/subuser/* | Account interface, including account information, sub-account ,etc 
+Order |/v1/order/* | Order interface, including order creation, cancellation, query, etc 
+Margin|/v1/margin/* | Margin interface, including debit, payment, query, etc 
+Cross Margin| /v1/cross-margin/* | Cross margin interface, including debit, payment, query, etc 
 
-- 该分类为大类整理，部分接口未遵循此规则，请根据需求查看有关接口文档
+- Above is a general category, it doesn't cover all API, you can refer to detailed API document according to your requirement.
 
-## 限频规则
+## Frequency-limited Rule
 
-- 行情类接口调用根据IP进行限频：10秒100次
-- 资产订单类接口调用根据Api Key维度进行限频：10秒100次
-- 限频规则按照时间均匀分布，10秒100次 等于 100毫秒1次
+- Each API Key is limited to 10 times per second
+- If API Key is empty in request, then each IP is limited to 10 times per second
 
-<aside class="notice">
-单个 API Key 维度限制。行情 API 访问无需签名。
-</aside>
+For example
 
-## 请求格式
+- Order interface is limited by API Key: no more than 10 times within 1 sec
+- Market data interface is limited by IP: no more than 10 times within 1 sec
 
-所有的API请求都以GET或者POST形式发出。对于GET请求，所有的参数都在路径参数里；对于POST请求，所有参数则以JSON格式发送在请求主体（body）里。
+## Request Format
 
-## 返回格式
+The API is restful and there are two method: GET and POST.
+- GET request: All parameters are included in URL
+- POST request: All parameters are formated as JSON and put int the request body
 
-所有的接口返回都是JSON格式。在JSON最上层有几个表示请求状态和属性的字段："status", "ch", 和 "ts". 实际的接口返回内容在"data"字段里.
+## Response Format
 
-### 返回内容格式
+The response is JSON format。There are four fields in the top level: `status`, `ch`, `ts` and `data`. The first three fields indicate the general status, the business data is is under `data` field.
 
-> Responds:
+Below is an example of response:
 
 ```json
 {
@@ -44,55 +44,52 @@
 }
 ```
 
-参数名称| 数据类型 | 描述
+Field| Data Type | Description 
 --------- | --------- | -----------
-status    | string    | API接口返回状态
-ch        | string    | 接口数据对应的数据流。部分接口没有对应数据流因此不返回此字段
-ts        | int       | 接口返回的调整为北京时间的时间戳，单位毫秒
-data      | object    | 接口返回数据主体
+status    | string    | Status of API response 
+ch        | string    | The data stream. It may be empty as some API doesn't have data stream 
+ts        | int       | The UTC timestamp when API respond, the unit is millisecond 
+data      | object    | The body data in response 
 
-## 错误信息
+## Error Message
 
-### 行情 API 错误信息
+### Market Data  API Error Message
 
-| 错误码  |  描述 |
+| Error Message | Description |
 |-----|-----|
-| bad-request | 错误请求 |
-| invalid-parameter | 参数错误 |
-| invalid-command | 指令错误 |
+| bad-request | The request is wrong |
+| invalid-parameter | The parameter is invalid |
+| invalid-command | The command is invalid |
 code 的具体解释, 参考对应的 `err-msg`.
 
-### 交易 API 错误信息
+### Order API Error Message
 
-| 错误码  |  描述 |
+| Error Message | Description |
 |-----|-----|
-| base-symbol-error |  交易对不存在 |
-| base-currency-error |  币种不存在 |
-| base-date-error | 错误的日期格式 |
-| account for id `12,345` and user id `6,543,210` does not exist| `account-id` 错误，请使用GET `/v1/account/accounts` 接口查询 | 
-| account-frozen-balance-insufficient-error | 余额不足 |
-| account-transfer-balance-insufficient-error | 余额不足无法冻结 |
-| bad-argument | 无效参数 |
-| api-signature-not-valid | API签名错误 |
-| gateway-internal-error | 系统繁忙，请稍后再试|
-| ad-ethereum-addresss| 请输入有效的以太坊地址|
-| order-accountbalance-error| 账户余额不足|
-| order-limitorder-price-error|限价单下单价格超出限制 |
-|order-limitorder-amount-error|限价单下单数量超出限制 |
-|order-orderprice-precision-error|下单价格超出精度限制 |
-|order-orderamount-precision-error|下单数量超过精度限制|
-|order-marketorder-amount-error|下单数量超出限制|
-|order-queryorder-invalid|查询不到此条订单|
-|order-orderstate-error|订单状态错误|
-|order-datelimit-error|查询超出时间限制|
-|order-update-error|订单更新出错|
+| base-symbol-error | Trade pair doesn't exist |
+| base-currency-error | Currency doesn't exist |
+| base-date-error | The date format is wrong |
+| account for id `12,345` and user id `6,543,210` does not exist| The`account-id` is wrong, please use GET `/v1/account/accounts` to get account |
+| account-frozen-balance-insufficient-error | Can not froze due to insufficient balance |
+| account-transfer-balance-insufficient-error | Can not transfer due to insufficient balance |
+| bad-argument | The arugment is wrong |
+| api-signature-not-valid | The API signature is wrong |
+| gateway-internal-error | System is too busy |
+| ad-ethereum-addresss| The Ethereum address is required |
+| order-accountbalance-error| Insufficient balance in account |
+| order-limitorder-price-error|The limited order price exceeds limitation |
+|order-limitorder-amount-error|The limited order amount exceeds limitation |
+|order-orderprice-precision-error|The limited order price exceeds precision limitation |
+|order-orderamount-precision-error|The limited order amount exceeds precision limitation|
+|order-marketorder-amount-error|The order amount exceeds limitation|
+|order-queryorder-invalid|Can not query the order|
+|order-orderstate-error|The order status is wrong|
+|order-datelimit-error|The query exceeds date limitation|
+|order-update-error|The order fail to update|
 
-## 使用建议
+## Suggestions
 
-1.行情类数据信息，建议使用WebSocket方式实时接收数据，并对接收数据进行缓存操作
-
-2.获取最新成交价，推荐使用/market/trade接口或使用WebSocket订阅market.$symbol.trade.detail，获取实时成交价格
-
-3.订单成交推送建议使用orders.$symbol.update主题，该主题具有严格的时序性以及更低的时延。
-
-4.下单资产信息使用WebSocket定订阅accounts主题，并结合Rest接口定时请求资产数据进行更新。
+1. To get market data: Use WebSocket to subscribe the real time data and cache the data for further usage
+2. To get latest trade price: Use `/market/trade` or WebSocket to subscribe `market.$symbol.trade.detail`.
+3. To get successful transaction: Use WebSocket to subscribe `orders.$symbol.update`, it has better performance and time-ordered.
+4. To change account assents: Use WebSocket to subscribe accounts topic, and regularly call API to get latest data.
