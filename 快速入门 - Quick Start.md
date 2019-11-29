@@ -1,0 +1,326 @@
+# 快速入门
+
+## 接入准备
+
+如需使用API ，请先登录网页端，完成API key的申请和权限配置，再据此文档详情进行开发和交易。  
+
+您可以点击 <a href='https://www.hbg.com/zh-cn/apikey/'>这里 </a> 创建 API Key。
+
+每个母账号可创建5组Api Key，每个Api Key可对应设置读取、交易、提币三种权限。  
+
+权限说明如下：
+
+- 读取权限：读取权限用于对数据的查询接口，例如：订单查询、成交查询等。
+- 交易权限：交易权限用于下单、撤单、划转类接口。
+- 提币权限：提币权限用于数字货币创建提币定点、取消提币订单操作。
+
+创建成功后请务必记住以下信息：
+
+- `Access Key`  API 访问密钥
+  
+- `Secret Key`  签名认证加密所使用的密钥（仅申请时可见）
+
+<aside class="notice">
+创建 API Key 时可以绑定 IP 地址，未绑定 IP 地址的 API Key 有效期为90天。出于安全考虑，强烈建议您绑定 IP 地址。
+</aside>
+<aside class="warning">
+风险提示：这两个密钥与账号安全紧密相关，无论何时都请勿向其它人透露。API Key的泄露可能会造成您的资产损失（即使未开通提币权限），若发现API Key泄露请尽快删除该API Key。
+</aside> 
+
+## SDK与代码示例
+
+**SDK（推荐）**
+
+[Java](https://github.com/huobiapi/huobi_Java)
+
+[Python3](https://github.com/huobiapi/huobi_Python)
+
+[C++](https://github.com/huobiapi/huobi_Cpp)
+
+**其它代码示例**
+
+https://github.com/huobiapi?tab=repositories
+
+## 接口类型
+
+火币为用户提供两种接口，您可根据自己的使用场景和偏好来选择适合的方式进行查询行情、交易或提现。  
+
+### REST API
+
+REST，即Representational State Transfer的缩写，是目前最流行的一种互联网软件架构。在RESTful架构中，每一个URL代表一种资源。    
+
+交易或资产提现等操作，建议开发者使用REST API进行操作。  
+
+### WebSocket API
+
+WebSocket是HTML5一种新的协议（Protocol）。它实现了客户端与服务器全双工通信，通过一次简单的握手就可以建立客户端和服务器连接，服务器可以根据业务规则主动推送信息给客户端。
+
+市场行情和买卖深度等信息，建议开发者使用WebSocket API进行获取。
+
+**接口鉴权**
+
+以上两种接口均包含公共接口和私有接口两种类型。  
+
+公共接口可用于获取基础信息和行情数据。公共接口无需认证即可调用。  
+
+私有接口可用于交易管理和账户管理。每个私有请求必须使用您的API key进行签名验证。
+
+## 接入URLs
+您可以自行比较使用api.huobi.pro和api-aws.huobi.pro两个域名的延迟情况，选择延迟低的进行使用。     
+
+其中，api-aws.huobi.pro域名对使用aws云服务的用户做了一定的链路延迟优化。  
+
+**REST API**
+
+**`https://api.huobi.pro`**  
+
+**`https://api-aws.huobi.pro`**  
+
+**Websocket Feed（行情）**
+
+**`wss://api.huobi.pro/ws`**  
+
+**`wss://api-aws.huobi.pro/ws`**  
+
+**Websocket Feed（资产和订单）**
+
+**`wss://api.huobi.pro/ws/v1`**  
+
+**`wss://api-aws.huobi.pro/ws/v1`**     
+
+<aside class="notice">
+请使用中国大陆以外的 IP 访问火币 API。
+</aside>
+<aside class="notice">
+鉴于延迟高和稳定性差等原因，不建议通过代理的方式访问火币API。
+</aside>
+<aside class="notice">
+为保证API服务的稳定性，建议使用日本AWS云服务器进行访问。如使用中国大陆境内的客户端服务器，连接的稳定性将难以保证。 
+</aside> 
+
+## 签名认证
+
+### 签名说明
+
+API 请求在通过 internet 传输的过程中极有可能被篡改，为了确保请求未被更改，除公共接口（基础信息，行情数据）外的私有接口均必须使用您的 API Key 做签名认证，以校验参数或参数值在传输途中是否发生了更改。  
+每一个API Key需要有适当的权限才能访问相应的接口，每个新创建的API Key都需要分配权限。在使用接口前，请查看每个接口的权限类型，并确认你的API Key有相应的权限。
+
+一个合法的请求由以下几部分组成：
+
+- 方法请求地址：即访问服务器地址 api.huobi.pro，比如 api.huobi.pro/v1/order/orders。
+
+- API 访问密钥（AccessKeyId）：您申请的 API Key 中的 Access Key。
+
+- 签名方法（SignatureMethod）：用户计算签名的基于哈希的协议，此处使用 HmacSHA256。
+
+- 签名版本（SignatureVersion）：签名协议的版本，此处使用2。
+
+- 时间戳（Timestamp）：您发出请求的时间 (UTC 时间)  。如：2017-05-11T16:22:06。在查询请求中包含此值有助于防止第三方截取您的请求。
+
+- 必选和可选参数：每个方法都有一组用于定义 API 调用的必需参数和可选参数。可以在每个方法的说明中查看这些参数及其含义。 请一定注意：对于 GET 请求，每个方法自带的参数都需要进行签名运算； 对于 POST 请求，每个方法自带的参数不进行签名认证，即 POST 请求中需要进行签名运算的只有 AccessKeyId、SignatureMethod、SignatureVersion、Timestamp 四个参数，其它参数放在 body 中。
+
+- 签名：签名计算得出的值，用于确保签名有效和未被篡改。
+
+### 签名步骤
+
+规范要计算签名的请求 因为使用 HMAC 进行签名计算时，使用不同内容计算得到的结果会完全不同。所以在进行签名计算前，请先对请求进行规范化处理。下面以查询某订单详情请求为例进行说明：
+
+查询某订单详情时完整的请求URL
+
+`https://api.huobi.pro/v1/order/orders?`
+
+`AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx`
+
+`&SignatureMethod=HmacSHA256`
+
+`&SignatureVersion=2`
+
+`&Timestamp=2017-05-11T15:19:30`
+
+`&order-id=1234567890`
+
+#### 1. 请求方法（GET 或 POST），后面添加换行符 “\n”
+
+
+`GET\n`
+
+#### 2. 添加小写的访问地址，后面添加换行符 “\n”
+
+`
+api.huobi.pro\n
+`
+
+#### 3. 访问方法的路径，后面添加换行符 “\n”
+
+`
+/v1/order/orders\n
+`
+
+#### 4. 按照ASCII码顺序对参数名进行排序，且进行URI编码，例如，下面是请求参数的原始顺序，且进行URI编码后
+
+
+`AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx`
+
+`order-id=1234567890`
+
+`SignatureMethod=HmacSHA256`
+
+`SignatureVersion=2`
+
+`Timestamp=2017-05-11T15%3A19%3A30`
+
+<aside class="notice">
+使用 UTF-8 编码，且进行了 URI 编码，十六进制字符必须大写，如 “:” 会被编码为 “%3A” ，空格被编码为 “%20”。
+</aside>
+<aside class="notice">
+时间戳（Timestamp）需要以YYYY-MM-DDThh:mm:ss格式添加并且进行 URI 编码。
+</aside>
+
+
+#### 5. 经过排序之后
+
+`AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx`
+
+`SignatureMethod=HmacSHA256`
+
+`SignatureVersion=2`
+
+`Timestamp=2017-05-11T15%3A19%3A30`
+
+`order-id=1234567890`
+
+#### 6. 按照以上顺序，将各参数使用字符 “&” 连接
+
+
+`AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2017-05-11T15%3A19%3A30&order-id=1234567890`
+
+#### 7. 组成最终的要进行签名计算的字符串如下
+
+`GET\n`
+
+`api.huobi.pro\n`
+
+`/v1/order/orders\n`
+
+`AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2017-05-11T15%3A19%3A30&order-id=1234567890`
+
+
+#### 8. 用上一步里生成的 “请求字符串” 和你的密钥 (Secret Key) 生成一个数字签名
+
+`4F65x5A2bLyMWVQj3Aqp+B4w+ivaA7n5Oi2SuYtCJ9o=`
+
+1. 将上一步得到的请求字符串和 API 私钥作为两个参数，调用HmacSHA256哈希函数来获得哈希值。
+
+2. 将此哈希值用base-64编码，得到的值作为此次接口调用的数字签名。
+
+#### 9. 将生成的数字签名加入到请求的路径参数里
+
+最终，发送到服务器的 API 请求应该为
+
+`https://api.huobi.pro/v1/order/orders?AccessKeyId=e2xxxxxx-99xxxxxx-84xxxxxx-7xxxx&order-id=1234567890&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2017-05-11T15%3A19%3A30&Signature=4F65x5A2bLyMWVQj3Aqp%2BB4w%2BivaA7n5Oi2SuYtCJ9o%3D`
+
+1. 把所有必须的认证参数添加到接口调用的路径参数里
+
+2. 把数字签名在URL编码后加入到路径参数里，参数名为“Signature”。
+
+## 子账号
+
+子账号可以用来隔离资产与交易，资产可以在母子账号之间划转；子账号用户只能在子账号内进行交易，并且子账号之间资产不能直接划转，只有母账号有划转权限。  
+
+子账号拥有独立的登录账号密码和 API Key，均由母账号在网页端进行管理。 
+
+每个母账号可创建200个子账号，每个子账号可创建5组Api Key，每个Api Key可对应设置读取、交易两种权限。
+
+子账号的 API Key 也可绑定 IP 地址, 有效期的限制与母账号的API Key一致。
+
+您可以点击 <a href='https://account.hbg.com/zh-cn/subaccount/management/'>这里 </a> 创建子账号并管理。  
+
+子账号可以访问所有公共接口，包括基本信息和市场行情，子账号可以访问的私有接口如下：
+
+接口|说明|
+----------------------|---------------------|
+[POST /v1/order/orders/place](#fd6ce2a756)	|创建并执行订单|
+[POST /v1/order/orders/{order-id}/submitcancel](#4e53c0fccd)	|撤销一个订单|
+[POST /v1/order/orders/batchcancel](#ad00632ed5)	|批量撤销订单|
+[POST /v1/order/orders/batchCancelOpenOrders](#open-orders)	|撤销当前委托订单|
+[GET /v1/order/orders/{order-id}](#92d59b6aad)	|查询一个订单详情|
+[GET /v1/order/orders](#d72a5b49e7)	|查询当前委托、历史委托|
+[GET /v1/order/openOrders](#95f2078356)	|查询当前委托订单|
+[GET /v1/order/matchresults](#0fa6055598)	|查询成交|
+[GET /v1/order/orders/{order-id}/matchresults](#56c6c47284)	|查询某个订单的成交明细|
+[GET /v1/account/accounts](#bd9157656f)	|查询当前用户的所有账户|
+[GET /v1/account/accounts/{account-id}/balance](#870c0ab88b)	|查询指定账户的余额|
+[POST /v1/futures/transfer](#e227a2a3e8)	|币币与合约账户间的资金划转|
+[POST /v1/dw/transfer-in/margin](#0d3c2e7382)|从币币交易账户划转至杠杆账户|
+[POST /v1/dw/transfer-out/margin](#0d3c2e7382)|从杠杆账户划转至币币交易账户|
+[POST /v1/margin/orders](#48cca1ce88)|申请借贷|
+[POST /v1/margin/orders/{order-id}/repay](#48aa7c8199)|归还借贷|
+[GET /v1/margin/loan-orders](#e52396720a)|查询借贷记录|
+[GET /v1/margin/accounts/balance](#6e79ba8e80)|查询杠杆账户余额|
+
+<aside class="notice">
+其他接口子账号不可访问，如果尝试访问，系统会返回 “error-code 403”。
+</aside>
+
+## 业务字典
+
+### 交易对
+
+交易对由基础币种和报价币种组成。以交易对 BTC/USDT 为例，BTC 为基础币种，USDT 为报价币种。  
+
+基础币种对应字段为 base-currency 。  
+
+报价币种对应字段为 quote-currency 。 
+
+### 账户
+
+不同业务对应需要不同的账户，account-id为不同业务账户的唯一标识ID。  
+
+account-id可通过/v1/account/accounts接口获取，并根据account-type区分具体账户。  
+
+账户类型包括：   
+
+- spot 现货账户  
+- otc OTC账户  
+- margin 逐仓杠杆账户，该账户类型以subType区分具体币种对账户  
+- super-margin（或cross-margin） 全仓杠杆账户  
+- point 点卡账户  
+- minepool 矿池账户  
+- etf ETF账户 
+
+### 订单、成交相关ID说明
+- order-id : 订单的唯一编号
+- client-order-id : 客户自定义ID，该ID在下单时传入，与下单成功后返回的order-id对应，该ID 24小时内有效。
+- match-id : 订单在撮合中的顺序编号
+- trade-id : 成交的唯一编号
+
+### 订单类型
+当前火币的订单类型是由买卖方向以及订单操作类型组成，例如：buy-market,buy为买卖方向，market为操作类型。  
+
+买卖方向：
+ - buy : 买
+ - sell: 卖  
+
+订单种类:
+ - limit : 限价单，该类型订单需指定下单价格，下单数量。
+ - market : 市价单，该类型订单仅需指定下单金额或下单数量，不需要指定价格，订单在进入撮合时，会直接与对手方进行成交，直至金额或数量低于最小成交金额或成交数量为止。
+ - limit-maker : 限价挂单，该订单在进入撮合时，只能作为maker进入市场深度,若订单会被成交，则撮合会直接拒绝该订单
+ - ioc : 立即成交或取消（immediately or cancel），该订单在进入撮合后，若不能直接成交，则会被直接取消（部分成交后，剩余部分也会被取消）。
+ - stop-limit : 止盈止损单，设置高于或低于市场价格的订单，当订单到达触发价格后，才会正式的进入撮合队列。
+
+### 订单状态
+
+- submitted : 等待成交，该状态订单已进入撮合队列当中。
+
+- partial-filled : 部分成交，该状态订单在撮合队列当中，订单的部分数量已经被市场成交，等待剩余部分成交。
+
+- filled : 已成交。该状态订单不在撮合队列中，订单的全部数量已经被市场成交。
+
+- partial-canceled : 部分成交撤销。该状态订单不在撮合队列中，此状态由partial-filled转化而来，订单数量有部分被成交，但是被撤销。
+
+- canceled : 已撤销。该状态订单不在撮合订单中，此状态订单没有任何成交数量，且被成功撤销。
+
+- canceling : 撤销中。该状态订单正在被撤销的过程中，因订单最终需在撮合队列中剔除才会被真正撤销，所以此状态为中间过渡态。
+
+
+更多信息，可以点击<a href='https://www.huobi.vn/zh-cn/guide/'>火币成长学院 </a> 进行了解。
