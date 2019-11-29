@@ -171,6 +171,7 @@ A：The USDT has multiple chains, therefore the withdraw order request should co
 If the chain parameter is empty, default target chain is `ERC20`. Or you can explicitly set the chain parameter to `usdterc20`.
 If the target chain is `OMNI` or `TRX`, the chain parameter should be `usdt` or `trc20usdt`.
 The available chain name can be retreived from API `/v2/reference/currencies`
+
 Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2
 
 ### Q3：How to assign parameter 'fee' when create withdraw request?
@@ -178,11 +179,15 @@ A：Please refer to the response from API `/v2/reference/currencies`, the respon
 - transactFeeWithdraw : The fee per time (only applicable for fixed type, withdrawFeeType=fixed）    	
 - minTransactFeeWithdraw : The minimum fee per time (only applicable for circulated type, withdrawFeeType=circulated)
 - maxTransactFeeWithdraw : The maximum fee per time (only applicable for circulated or ratio type)	
-- transactFeeRateWithdraw :  The fee ratio per time (only applicable for ratio type，withdrawFeeType=ratio)   Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2   
+- transactFeeRateWithdraw :  The fee ratio per time (only applicable for ratio type，withdrawFeeType=ratio) 
+
+Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2   
 
 ### Q4：How to query my withdraw quota?
 A：Please check the response fields from API `/v2/account/withdraw/quota`, they contain the quota for once, current day, current time, total and remaining.
-接口文档地址: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2-3  
+
+Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2-3
+
 Note: If you need to withdraw large amount and it reaches the limitation, you can contact our official support (for example, send email to support@huobi.pro).
 
 ## API Technical Support
