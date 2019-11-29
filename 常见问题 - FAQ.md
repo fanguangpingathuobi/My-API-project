@@ -10,26 +10,26 @@ How to subscribe: Login to API Announcements page, click "Follow" button in the 
 ## Access and Authentication
 
 ### Q1：How many API Keys one user can apply?
-A:  Every main account can create 5 API Keys, and each API Key has 3 permissions: **read**, **transact** and **withdraw**.
-Each main account could create 200 sub-account, and each sub-account could create 5 API Keys, each API key has 2 permissions: **read** and **transact**.
-1) Read permission: It is used to query data, for example, **order query**, **deal query**. 
-2) Transaction permission: it is used to **place order**, **cancel order** and **transfer**.
-3) Withdraw permission: it is used to **schedule withdraw**, **cancel withdraw**.
+A:  Every parent user can create 5 API Keys, and each API Key can be granted with either of 3 permissions: **read**, **trade** and **withdraw**.
+Each parent user could create up to 200 sub users, and each sub user could create 5 API Keys, each API key can be granted with either of 2 permissions: **read** and **transact**.
+1) Read permission: It is used to query data, for example, **query orders**, **query trades**. 
+2) Trade permission: it is used to **place order**, **cancel order** and **transfer**.
+3) Withdraw permission: it is used to **withdraw**, **cancel withdraw**.
 
 ### Q2：Why APIs are always disconnected or timeout?
 A：Please follow below suggestions:
-1) It is unstable if the client machine is in China mainland, it is suggested to invoke API from AWS Japan
-2) It is suggested to invoke API in domain <u>api.huobi.pro</u> or <u>api-was.huobi.pro</u>.
+1) It is unstable if the client's server locates in China mainland, it is suggested to invoke API from a server at AWS Japan.
+2) It is suggested to invoke API only to host <u>api.huobi.pro</u> or <u>api-was.huobi.pro</u>.
 
 ### Q3：Why the WebSocket is often disconnected?
-A：Please check below situations:
+A：Please check below possible reasons:
 1) The client didn't respond 'Pong'. It is requird to respond 'Pong' after receive 'Ping' from server.
 2) The server didn't receive 'Pong' successfully due to network issue.
 3) The connection is broken due to network issue.
-4) It is suggested to implement WebSocket re-connect mechanism. If the connection is broken after Ping/Pong heartbeat, the application should re-connect automatically.
+4) It is suggested to implement WebSocket re-connect mechanism. If Ping/Pong works well but the connection is broken, the application should be able to re-connect automatically.
 
 ### Q4：What is the difference between <u>api.huobi.pro</u> 与 <u>api-aws.huobi.pro</u>?
-A：The domain <u>api-aws.huobi.pro</u> is optimized for AWS client, the latency will be lower.
+A：The host <u>api-aws.huobi.pro</u> is optimized for AWS client, the latency is lower.
 
 ### Q5：Why the signature authentication always fail?
 A：Please compare  your signature text with below example: 
@@ -81,34 +81,35 @@ order-id=1234567890
 - You can also refer to the signature guide: https://huobiapi.github.io/docs/spot/v1/cn/#c64cd15fdc
 
 ### Q6：Why the API return 'gateway-internal-error'?
-A：Please check below situations:
-- Check the `account-id`, it should be returned from `GET /v1/account/accounts`.
+A：Please check below possible reasons:
+- Check the `account-id`, it could be returned from `GET /v1/account/accounts`.
 - It may be due to network issue, please try again later.
 - The data format should be correct (standard JSON).
 - The `Content-Type` in POST header should be `application/json` .
 
 ### Q7：Why the API return 'login-required'?
-A：Please check below situations:
-
+A：Please check below possible reasons:
 - The parameter should include `AccessKeyId`.
-- The `account-id` should be returned from `GET /v1/account/accounts`.
-- The request body in POST should NOT included in signature text.
-- The request parameter in GET should be ordered by ASCII.
+- Check the `account-id` it could be returned from `GET /v1/account/accounts`.
+- The request body in POST request should NOT be included in signature text.
+- The request parameter in GET request should be ordered by ASCII.
 
 ## Market Data
-### Q1：What is the update frequency?
-A：The data is updated **once per second**, for both Rest API and WebSocket.
 
-### Q2：Could the trade volume within 24 hours (/market/detail) decrease?
-A：The trade volume from `/market/detail`  is for last 24 hours, it is possible that the volume decrease as time goes on.
+### Q1：What is the update frequency of market depth?
+A：The data is updated **once per second**. But, the BBO (Best Bid/Offer) feed upon Websocket subscription to `market.$symbol.bbo` is updating in tick by tick mode.
 
-### Q3：How to retrieve the last trade price?
-A：It is suggest to use Rest API `/market/trade` to retrieve last trade, or use WebSocket to subscribe `market.$symbol.trade.detail` topic, the price will be included in the respond.
+### Q2：Could the total volume of Last 24h Market Summary (GET /v1/market/detail) decrease?
+A：Yes, it is possible that the accumulated volume and the accumulated value counted for current 24h window is smaller than previous.
 
-### Q4：What is the star time for candlestick chart?
-A： The start time for candlesticks chart is based on Singapore time, for example, the duration for daily candlestick chart is from 00:00:00 to 23:59:59 Singapore time.
+### Q3：How to retrieve the last trade price in market?
+A：It is suggested to request to `GET /v1/market/trade` to get last market price, or to subscribe WebSocket topic `market.$symbol.trade.detail` for getting the same.
+
+### Q4：Which timezone the start time of candlesticks falls into?
+A： The start time for candlesticks is based on Singapore time (GMT+8), for example, the duration for daily candlesticks is from 00:00:00 to 23:59:59 Singapore time.
 
 ## Order and Trade
+
 ### Q1：What is account-id?
 A： The `account-id` defines the Identity for different business type, it can be retrieved from API `/v1/account/accounts` , where the `account-type` is the business types.
 The types include:
@@ -122,10 +123,10 @@ The types include:
 7. etf: ETF account
 
 ### Q2：What is client-order-id?
-A： The `client-order-id` is one parameter of the place order request, it is string type and max length is 64. This id is generated by client, and is valid within 24 hours.
+A： The `client-order-id` is an optional request parameter while placing order. It's string type which maximum length is 64. The client order id is generated by client, and is only valid within 24 hours.
 
 ### Q3：How to get the order size, price and decimal precision?
-A： You can call API `/v1/common/symbols` to get the currency pair information, pay attention to the difference between the minimum amount and the minimum price.   
+A： You can call API `GET /v1/common/symbols` to get the currency pair information, pay attention to the difference between the minimum amount and the minimum price.   
 Below are common errors:
 - order-value-min-error: The order price is less than mininum price
 - order-orderprice-precision-error : The precision for limited order price is wrong 
@@ -137,59 +138,58 @@ Below are common errors:
 
 ### Q4：What is the difference between two WebSocket topic 'orders.\$symbol' and 'orders.\$symbol.update'?
 A： Below are the difference:
-1. The topic `order.$symbol` is the legacy version, we will not update and support in the future, it is suggested to use topic `orders.$symbol.update`.
-2. The notification from new topic `orders.$symbol.update` is ordered by time, which follow the orders matching time, and it has lower latency.
-3. In order to avoid duplicate data and for better performance, the orignial order information is not included in topic `orders.$symbol.update`. If you require the original order information, you can save them when you place the order, or query the detailed order information when you receive the notification.
+1. The topic `order.$symbol` is the legacy version, which will be no longer supported in the near future. It is strongly recommended to subscribe topic `orders.$symbol.update` instead for getting order updates.
+2. The update message sequence of `orders.$symbol.update` strictly follows transaction time, with lower latency.
+3. In order to reduce latency, the topic `orders.$symbol.update` doesn't include original order details and transaction fee etc. If you require the original order information or transaction fee details, you may query to corresponding REST API endpoint.
 
-### Q5：After I receive a trade successful notification I place a new order, why I get balance insufficient error?
-A：In order to update timely with low latency, the notification is sent after the orders match successfully, therefor your assets may not be cleared. If you want to place a new order succesfully, you can follow below ways:
-1. You can subscribe the `accounts` notification to make sure your assets are cleared.
-2. After you get the trade notification, use Rest API to query your balance to make sure your balance is sufficient.
+### Q5：Why I got insufficient balance error while placing an order just after a successful order matching?
+A：The time order matching update being sent down, the clearing service of that order may be still in progress at backend. Suggest to follow either of below to ensure a successful order submission:
+1. Subscribe to Websocket topic `accounts` for getting account balance moves to ensure the completion of asset clearing.
+2. Check account balance from REST endpoint to ensure sufficient available balance for the next order submission.
 3. Leave sufficient balance in your account.
 
-### Q6: What is the difference between 'filled-fees' and 'filled-points' in matching result?
-A: There are two types of transaction fee, filled-fees and filled-points, and they won't happen together:
-1) filled-fees: When the transaction happens, the fee is charged from your bought currency. For example, if you buy BTC/USDT with `filled-fees` value，then the transaction fee will be BTC.
-2) filled-points: When the transaction happens, the fee is charged from HT or point card. The unit of the fee should refer to `fee-deduct-currency`.
+### Q6: What is the difference between 'filled-fees' and 'filled-points' in match result?
+A: Transaction fee can be paid from either of below.
+1) filled-fees: Filled-fee is also called transaction fee. It's charged from your income currency from the transaction. For example, if your purchase order of BTC/USDT got matched，the transaction fee will be based on BTC.
+2) filled-points: If user enabled transaction fee deduction, the fee should be charged from either HT or Point. User could refer to field `fee-deduct-currency` to get the exact deduction type of the transaction.
+
 
 ### Q7: What is the difference between 'match-id' and 'trade-id' in matching result?
-A: The `match-id` is the identity for order matching, the `trade-id` is the identity for the transaction. One `match-id` may be correlated with multiple `trade-id`, or no `trade-id`( the order is cancelled).
+A: The `trade-id` is the unique identifier for each trade. If a taker's order got matched with 3 maker's orders at the same time, it generates 3 trade IDs but only one match ID.
 
-## Account Deposit and Withdraw
-### Q1：Why the API return error 'api-not-support-temp-addr' when withdraw?
-A：In order for safe purpose, the withdraw API only support the address in withdraw address list. Right now the address can be updated in website or mobile App manually, the address can NOT be updated by API.
+### Q8: Why the order submission could be rejected even though the order price is set as same as current best bid (or best ask)?
+A: For some extreme illiquid trading symbols, the best quote price at particular time might be far away from last trade price. But the price limit is actually based on last trade price which could possibly exclude best quote price from valid range for any new order.
 
-### Q2：Why the API return error 'Invaild-Address' when withdraw USDT?
-A：The USDT has multiple chains, therefore the withdraw order request should contains the chain parameter. Below tables the relationship between the Chain and the chain parameter:
+## Deposit and Withdraw
 
-| Chain           | chain parameter |
+### Q1：Why the API returns error 'api-not-support-temp-addr' when withdrawing?
+A：User has to include the address into the pre-defined address table on Huobi official website before withdrawing through API.
+
+### Q2：Why the API returns error 'Invaild-Address' when withdraw USDT?
+A：USDT locates on multiple chains, therefore the withdraw order should clearly specify which chain the withdrawal goes to. See the table below:
+
+| Chain           | Field Value |
 | --------------- | --------------- |
 | ERC20 (default) | `usdterc20`     |
 | OMNI            | `usdt`          |
 | TRX             | `trc20usdt`     |
 
-If the chain parameter is empty, default target chain is `ERC20`. Or you can explicitly set the chain parameter to `usdterc20`.
+If leaving the field empty, default target chain is `ERC20`. Or you can explicitly set the chain to `usdterc20`.
+If the target chain is `OMNI` or `TRX`, the field value should be `usdt` or `trc20usdt`.
+The full chain name list for all currencies can be retrieved from endpoint `GET /v2/reference/currencies`.
 
-If the target chain is `OMNI` or `TRX`, the chain parameter should be `usdt` or `trc20usdt`.
-The available chain name can be retreived from API `/v2/reference/currencies`
+### Q3：How to specify 'fee' when creating a withdraw request?
 
-Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2
-
-### Q3：How to assign parameter 'fee' when create withdraw request?
-A：Please refer to the response from API `/v2/reference/currencies`, the response field `withdrawFeeType` is the fee type, and the fee should be  assigned according to different fee type: 
-- transactFeeWithdraw : The fee per time (only applicable for fixed type, withdrawFeeType=fixed）    	
-- minTransactFeeWithdraw : The minimum fee per time (only applicable for circulated type, withdrawFeeType=circulated)
-- maxTransactFeeWithdraw : The maximum fee per time (only applicable for circulated or ratio type)	
-- transactFeeRateWithdraw :  The fee ratio per time (only applicable for ratio type，withdrawFeeType=ratio) 
-
-Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2   
+A：Please refer to the response from endpoint `GET /v2/reference/currencies`, where the field `withdrawFeeType` defining different fee types below: 
+- transactFeeWithdraw : The withdraw fee per request (only applicable when withdrawFeeType=fixed).    	
+- minTransactFeeWithdraw : The minimum withdraw fee per request (only applicable when withdrawFeeType=circulated).
+- maxTransactFeeWithdraw : The maximum withdraw fee per request (only applicable when withdrawFeeType=circulated or ratio).
+- transactFeeRateWithdraw : The withdraw fee rate per request (only applicable when withdrawFeeType=ratio).
 
 ### Q4：How to query my withdraw quota?
-A：Please check the response fields from API `/v2/account/withdraw/quota`, they contain the quota for once, current day, current time, total and remaining.
+A：Please refer to the response from endpoint `GET /v2/account/withdraw/quota`, where quota per request, daily quota, annual quota, overall quota are available.
 
-Refer to API document: https://huobiapi.github.io/docs/spot/v1/cn/#apiv2-3
-
-Note: If you need to withdraw large amount and it reaches the limitation, you can contact our official support (for example, send email to support@huobi.pro).
+Note: If you need to withdraw large amount which breaking the limitation, you can contact our official support (support@huobi.pro) for assistance.
 
 ## API Technical Support
 If you have any other questions on API, you can contact us by below ways:
