@@ -297,7 +297,7 @@ Order classification includes:
  - market : The price is not required in order creation request, you only need to specify either money or amount. The matching and trade will happen automatically according to the request.
  - limit-maker: The price is specified in order creation request as market maker. It will not be matched in the matching queue.
  - ioc: ioc stands for "immediately or cancel", it means the order will be canceled if it couldn't be matched. If the order is partially traded, the remaining part will be canceled.
- - stop-limit: The order will be put into matching queue only when the price reaches the trigger price.
+ - stop-limit: The price in order creation request is the trigger price. The order will be put into matching queue only when the market price reaches the trigger price.
 
 ### Order Status
 
@@ -314,4 +314,4 @@ Order classification includes:
 - canceling: The order is under canceling, but haven't been removed from matching queue yet.
 
 
-You can refer to <a href='https://www.huobi.com/en-us/guide/'>火币成长学院</a> to get detailed information
+You can refer to <a href='https://www.huobi.com/en-us/guide/'>Huobi Course</a> to get detailed information
