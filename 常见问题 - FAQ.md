@@ -10,11 +10,14 @@ You can click <a href='https://huobiglobal.zendesk.com/hc/en-us/sections/3600000
 ## Access and Authentication
 
 ### Q1：How many API Keys one user can apply?
-A:  Every main account can create 5 API Keys, and each API Key has 3 permissions: **read**, **transact** and **withdraw**.
-Each main account could create 200 sub-account, and each sub-account could create 5 API Keys, each API key has 2 permissions: **read** and **transact**.
-1) Read permission: It is used to query data, for example, **order query**, **deal query**. 
-2) Transaction permission: it is used to **place order**, **cancel order** and **transfer**.
-3) Withdraw permission: it is used to **schedule withdraw**, **cancel withdraw**.
+A:  Every account can create 5 API Keys, and each API Key has 3 permissions: **read**, **trade** and **withdraw**.
+Each user could create 200 sub users, and each sub user could create 5 API Keys, each API key can be granted with either of permissions: **read** and **trade**.
+
+1) Read permission: It is used to query data, for example, **order query**, **trades query**.
+
+2) Trade permission: it is used to **place order**, **cancel order** and **transfer**.
+
+3) Withdraw permission: it is used to **withdraw**, **cancel withdraw**.
 
 ### Q2：Why APIs are always disconnected or timeout?
 A：Please follow below suggestions:
@@ -41,6 +44,7 @@ api.huobi.pro\n
 AccessKeyId=rfhxxxxx-950000847-boooooo3-432c0&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2019-10-28T07%3A28%3A38
 ```
 Please check whether you follow below rules:
+
 1) The parameter in signature text should be ordered by ASCII, for example below is the original parameters:
 
 ```
@@ -65,11 +69,17 @@ order-id=1234567890
 - The timestamp should be formated as `YYYY-MM-DDThh:mm:ss` and after encoded it should be like `2017-05-11T15%3A19%3A30`  
 
 3) The signature should be base64 encoded.
+
 4) The parameter for Get request should be included in signature request.
+
 5) The Timestamp should be UTC time and the format should be YYYY-MM-DDTHH:mm:ss.
+
 6) The time difference between your timestamp and standard should be less than 1 minute.
+
 7) The message body doesn't need URI encoded if you are using WebSocket for authentication.
+
 8) The host in signature text should be the same as the host in your API request.
+
 9) The hidden text in API Key and Secret Key may have impact on the signature.
 
 - Right now the official SDK supports 3 language: Java, Python3 and C++, you can choose the one that suitable for you.
