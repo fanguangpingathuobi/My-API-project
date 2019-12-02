@@ -19,7 +19,6 @@ It is very welcome for market maker who has good market making strategy and larg
 
 And provide below details:
 
-
 1. UID (not linked to any rebate program in any accounts)
 2. Screenshot of trading volume in other transaction platform (such as trading volume within 30 days, or VIP status)
 3. A brief description of your market-making strategy 
