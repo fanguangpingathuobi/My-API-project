@@ -239,83 +239,79 @@ API|Description
 [POST /v1/order/orders/batchcancel](#ad00632ed5)	|Cancel multiple orders
 [POST /v1/order/orders/batchCancelOpenOrders](#open-orders)	|Cancel the open orders
 [GET /v1/order/orders/{order-id}](#92d59b6aad)	|Query a specific order
-[GET /v1/order/orders](#d72a5b49e7)	|Query orders by condition
+[GET /v1/order/orders](#d72a5b49e7)	|Query orders with criteria
 [GET /v1/order/openOrders](#95f2078356)	|Query open orders
 [GET /v1/order/matchresults](#0fa6055598)	|Query the order matching result
 [GET /v1/order/orders/{order-id}/matchresults](#56c6c47284)	|Query a specific order matching result
 [GET /v1/account/accounts](#bd9157656f)	|Query all accounts in current user
 [GET /v1/account/accounts/{account-id}/balance](#870c0ab88b)	|Query the specific account balance
 [POST /v1/futures/transfer](#e227a2a3e8)	|Transfer with future account
-[POST /v1/dw/transfer-in/margin](#0d3c2e7382)|Transfer to margin account
-[POST /v1/dw/transfer-out/margin](#0d3c2e7382)|Transfer from margin account
-[POST /v1/margin/orders](#48cca1ce88)|Request debit
+[POST /v1/dw/transfer-in/margin](#0d3c2e7382)|Transfer from spot to margin account
+[POST /v1/dw/transfer-out/margin](#0d3c2e7382)|Transfer from margin to spot account
+[POST /v1/margin/orders](#48cca1ce88)|Request margin loan
 [POST /v1/margin/orders/{order-id}/repay](#48aa7c8199)|Repay the debit for specific order
-[GET /v1/margin/loan-orders](#e52396720a)|Query loan orders
+[GET /v1/margin/loan-orders](#e52396720a)|Query history loan orders
 [GET /v1/margin/accounts/balance](#6e79ba8e80)|Query margin account balance
 
 <aside class="notice">
-其他接口子账号不可访问，如果尝试访问，系统会返回 “error-code 403”。
+All other APIs couldn't be accessed by sub account, otherwise the API will return “error-code 403”。
 </aside>
 
 ## Glossary
 
-### 交易对
+### Trading symbols
 
-交易对由基础币种和报价币种组成。以交易对 BTC/USDT 为例，BTC 为基础币种，USDT 为报价币种。  
+The trading symbols are consist of base currency and quote currency. Take the symbol `BTC/USDT` as an example, `BTC` is the base currency, and `USDT` is the quote currency.  
 
-基础币种对应字段为 base-currency 。  
+### Account
 
-报价币种对应字段为 quote-currency 。 
+The `account-id` defines the Identity for different business type, it can be retrieved from API `/v1/account/accounts` , where the `account-type` is the business types.
+The types include:
 
-### 账户
+  1. spot: Spot account
+  2. otc: OTC account
+  3. margin: Isolated margin account, the detailed currency type is defined in `subType`
+  4. super-margin / cross-margin:  Cross-margin account
+  5. point: Point card account
+  6. minepool: Minepool account
+  7. etf: ETF account
 
-不同业务对应需要不同的账户，account-id为不同业务账户的唯一标识ID。  
+### Identity
 
-account-id可通过/v1/account/accounts接口获取，并根据account-type区分具体账户。  
+The frequently used Identities are listed below:
 
-账户类型包括：   
+- order-id: The unique identity for order.
+- client-order-id: The identity that defined by client. This id is included in order creation request, and will be returned as order-id. This id is valid within 24 hours.
+- match-id : The identity for order matching.
+- trade-id : The unique identity for the trade.
 
-- spot 现货账户  
-- otc OTC账户  
-- margin 逐仓杠杆账户，该账户类型以subType区分具体币种对账户  
-- super-margin（或cross-margin） 全仓杠杆账户  
-- point 点卡账户  
-- minepool 矿池账户  
-- etf ETF账户 
+### Order Type
+The order type is consist of trade direction and order classification. Take `buy-market` as an example, the trade direction is `buy`, the operation type is `market`.  
 
-### 订单、成交相关ID说明
-- order-id : 订单的唯一编号
-- client-order-id : 客户自定义ID，该ID在下单时传入，与下单成功后返回的order-id对应，该ID 24小时内有效。
-- match-id : 订单在撮合中的顺序编号
-- trade-id : 成交的唯一编号
+Trade direction includes:
+ - buy
+ - sell  
 
-### 订单类型
-当前火币的订单类型是由买卖方向以及订单操作类型组成，例如：buy-market,buy为买卖方向，market为操作类型。  
-
-买卖方向：
- - buy : 买
- - sell: 卖  
-
-订单种类:
- - limit : 限价单，该类型订单需指定下单价格，下单数量。
+Order classification includes:
+ - limit: 限价单，该类型订单需指定下单价格，下单数量。
  - market : 市价单，该类型订单仅需指定下单金额或下单数量，不需要指定价格，订单在进入撮合时，会直接与对手方进行成交，直至金额或数量低于最小成交金额或成交数量为止。
  - limit-maker : 限价挂单，该订单在进入撮合时，只能作为maker进入市场深度,若订单会被成交，则撮合会直接拒绝该订单
  - ioc : 立即成交或取消（immediately or cancel），该订单在进入撮合后，若不能直接成交，则会被直接取消（部分成交后，剩余部分也会被取消）。
  - stop-limit : 止盈止损单，设置高于或低于市场价格的订单，当订单到达触发价格后，才会正式的进入撮合队列。
 
-### 订单状态
+### Order Status
 
-- submitted : 等待成交，该状态订单已进入撮合队列当中。
+- submitted: The order is submitted, and already in the matching queue, waiting for deal.
 
-- partial-filled : 部分成交，该状态订单在撮合队列当中，订单的部分数量已经被市场成交，等待剩余部分成交。
+- partial-filled: The order is already in the matching queue and partially traded, and is waiting for further matching and trade.
 
-- filled : 已成交。该状态订单不在撮合队列中，订单的全部数量已经被市场成交。
+- filled: The order is already traded and not in the matching queue any more.
 
-- partial-canceled : 部分成交撤销。该状态订单不在撮合队列中，此状态由partial-filled转化而来，订单数量有部分被成交，但是被撤销。
+- partial-canceled: The order is not in the matching queue any more. The status is transferred from 'partial-filled', the order is partially trade, but remaining is canceled.
 
-- canceled : 已撤销。该状态订单不在撮合订单中，此状态订单没有任何成交数量，且被成功撤销。
+- canceled: The order is not in the matching queue any more, and completely canceled. There is no trade assoicated with this order.
 
-- canceling : 撤销中。该状态订单正在被撤销的过程中，因订单最终需在撮合队列中剔除才会被真正撤销，所以此状态为中间过渡态。
+- canceling: The order is under canceling, but haven't been removed from matching queue yet.
 
 
-更多信息，可以点击<a href='https://www.huobi.vn/zh-cn/guide/'>火币成长学院 </a> 进行了解。
+You can refer to <a href='https://www.huobi.com/en-us/guide/'>火币成长学院</a> to get detailed information
