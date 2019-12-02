@@ -28,7 +28,7 @@
 |2019.07.23 20:00| GET /v1/fee/fee-rate/get|New|Added transaction fee rate |
 |2019.07.22 12:00| GET /v1/order/orders/{order-id}/matchresults; GET /v1/order/matchresults|New|Added new fields `role` to indicate the order was "taker" or "maker"|
 |2019.07.11 20:00| POST /v1/order/orders/place; POST /v1/order/orders/submitCancelClientOrder; GET /v1/order/orders/getClientOrder|Update<br />New|Support client order ID。|
-|2019.07.08 12:00| Websocket Asset and order topics|Update|Enhanced Websocket [heartbeat and rate limit](#5ea2e0cde2-3)|
+|2019.07.08 12:00| Websocket Asset and order topics|Update|Enhanced Websocket heartbeat and rate limit|
 |2019.06.14 16:00| POST /v1/dw/withdraw/api/create|Update|support 'fast withdraw' |
 |2019.06.17 16:00| GET /v1/stable_coin/exchange_rate; POST /v1/stable_coin/exchange |New| Support user query Stable Coin exchange rate, and perform exchange |
 |2019.06.12 16:00| GET /v1/common/symbols|Update|Add more reference information of a symbol|
@@ -43,5 +43,5 @@
 | 2018.07.10 11:00 | GET `/market/history/kline`  |Update| The size parameter value range changes from [1-1000] to [1-2000]|
 | 2018.07.06 16:00 | POST `/v1/order/orders/place` |Update| Added buy-limit-maker and sell-limit-maker order types|
 | 2018.07.06 16:00 | GET `/v1/order/openOrders`<br>POST `/v1/order/orders/batchCancelOpenOrders` | New | |
-| 2018.07.02 16:00 | ETF 相关接口 | New | Support transfer in/out of HB10.|
+| 2018.07.02 16:00 | ETF related | New | Support transfer in/out of HB10.|
 | 2018.06.20 16:00 | GET `/market/tickers` | New | |

@@ -60,8 +60,6 @@ data      | object    | The body data in response
 | bad-request | The request is wrong |
 | invalid-parameter | The parameter is invalid |
 | invalid-command | The command is invalid |
-code 的具体解释, 参考对应的 `err-msg`.
-
 ### Order API Error Message
 
 | Error Message | Description |
