@@ -80,11 +80,11 @@ order-id=1234567890
 
 9) The hidden text in API Key and Secret Key may have impact on the signature.
 
-- Right now the official SDK supports 3 language: Java, Python3 and C++, you can choose the one that suitable for you.
-<a href='https://github.com/HuobiRDCenter'>Download SDK </a> 
-<a href='python_signature_demo.md'>Python sigature demo</a>
-<a href='java_signature_demo.md'>JAVA signature demo</a>
-<a href='cpp_signature_demo.md'>C++ signature demo</a>
+- Right now the official SDK supports 3 language: Java, Python3 and C++, you can choose the one that suitable for you.    
+<a href='https://github.com/HuobiRDCenter'>Download SDK </a>    
+<a href='python_signature_demo.md'>Python sigature demo</a>    
+<a href='java_signature_demo.md'>JAVA signature demo</a>   
+<a href='cpp_signature_demo.md'>C++ signature demo</a>   
 
 - You can also refer to the signature guide: https://huobiapi.github.io/docs/spot/v1/cn/#c64cd15fdc
 
@@ -172,7 +172,7 @@ A: For some extreme illiquid trading symbols, the best quote price at particular
 
 A: You can get details from Rest API ` GET /v1/common/symbols`. The `leverage-ratio` represents the isolated-margin ratio. The `super-margin-leverage-ratio` represents the cross-margin.
 
-The value `0` indcates that the trading symbols doesn't support margin trading.
+The value `0` indcates that the trading symbols doesn't support margin trading.
 
 ## Deposit and Withdraw
 
