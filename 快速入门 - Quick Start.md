@@ -293,11 +293,11 @@ Trade direction includes:
  - sell  
 
 Order classification includes:
- - limit: 限价单，该类型订单需指定下单价格，下单数量。
- - market : 市价单，该类型订单仅需指定下单金额或下单数量，不需要指定价格，订单在进入撮合时，会直接与对手方进行成交，直至金额或数量低于最小成交金额或成交数量为止。
- - limit-maker : 限价挂单，该订单在进入撮合时，只能作为maker进入市场深度,若订单会被成交，则撮合会直接拒绝该订单
- - ioc : 立即成交或取消（immediately or cancel），该订单在进入撮合后，若不能直接成交，则会被直接取消（部分成交后，剩余部分也会被取消）。
- - stop-limit : 止盈止损单，设置高于或低于市场价格的订单，当订单到达触发价格后，才会正式的进入撮合队列。
+ - limit: Both of the price and amount should be specifided in order creation request.
+ - market : The price is not required in order creation request, you only need to specify either money or amount. The matching and trade will happen automatically according to the request.
+ - limit-maker: The price is specified in order creation request as market maker. It will not be matched in the matching queue.
+ - ioc: ioc stands for "immediately or cancel", it means the order will be canceled if it couldn't be matched. If the order is partially traded, the remaining part will be canceled.
+ - stop-limit: The order will be put into matching queue only when the price reaches the trigger price.
 
 ### Order Status
 
