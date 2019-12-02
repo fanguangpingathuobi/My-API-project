@@ -3330,7 +3330,7 @@ This topic sends a new candlestick whenever it is available.
 
 Parameter | Data Type | Required | Description                      | Value Range
 --------- | --------- | -------- | -----------                      | -----------
-symbol    | string    | true     | Trading symbol     | All supported trading symbols, e.g. btcusdt, bccbtc
+symbol    | string    | true     | Trading symbol     | All supported trading symbol, e.g. btcusdt, bccbtc.Refer to `GET /v1/common/symbols`
 period     | string    | true     | Candlestick interval   | 1min, 5min, 15min, 30min, 60min, 4hour, 1day, 1mon, 1week, 1year
 
 > Response
@@ -3417,7 +3417,7 @@ This topic sends the latest market by price order book in snapshot mode at 1-sec
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                   | Refer to /v1/common/symbols
+symbol    | string    | true     | NA                    | Trading symbol                   | Refer to `GET /v1/common/symbols`
 type      | string    | true     | step0                 | Market depth aggregation level, details below     | step0, step1, step2, step3, step4, step5
 
 **"type" Details**
@@ -3511,7 +3511,7 @@ While any of best bid, best ask, best bid size, best ask size is changing, subsc
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                   | Refer to /v1/common/symbols
+symbol    | string    | true     | NA                    | Trading symbol                   | Refer to `GET /v1/common/symbols`
 
 > Response
 
@@ -3574,7 +3574,7 @@ This topic sends the latest completed trade. It updates in tick by tick mode.
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                     | Refer to /v1/common/symbols
+symbol    | string    | true     | NA                    | Trading symbol                     | Refer to `GET /v1/common/symbols`
 
 > Response
 
@@ -3654,7 +3654,7 @@ This topic sends the latest market stats with 24h summary. It updates in snapsho
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                     | Refer to /v1/common/symbols
+symbol    | string    | true     | NA                    | Trading symbol                     | Refer to `GET /v1/common/symbols`
 
 > Response
 
@@ -3979,7 +3979,7 @@ This topic publishes all order updates of the current account.
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                       | All supported trading symbols, e.g. btcusdt, bccbtc. support wildcard "*".
+symbol    | string    | true     | NA                    | Trading symbol                       | All supported trading symbols, e.g. btcusdt, bccbtc.Refer to `GET /v1/common/symbols`.support wildcard "*".
 
 > Response
 
@@ -4066,7 +4066,7 @@ This topic publishes all order updates of the current account. By comparing with
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                       | Refer to /v1/common/symbols, wild card (\*) is supported 
+symbol    | string    | true     | NA                    | Trading symbol                       | Refer to `GET /v1/common/symbols`. wild card (\*) is supported 
 
 
 
@@ -4248,7 +4248,7 @@ Search past and open orders based on searching criteria.
 Parameter  | Data Type | Required | Default | Description                                   | Value Range
 ---------  | --------- | -------- | ------- | -----------                                   | ----------
 account-id | int       | true     | NA      | Account id                        | NA
-symbol     | string    | true     | NA      | Trading symbol                | Refer to /v1/common/symbols
+symbol     | string    | true     | NA      | Trading symbol                | Refer to `GET /v1/common/symbols`
 types      | string    | false    | NA      | Order type   | buy-market, sell-market, buy-limit, sell-limit, buy-ioc, sell-ioc, buy-limit-maker, sell-limit-maker, buy-stop-limit, sell-stop-limit
 states     | string    | true    | NA      | Order state  | submitted, partial-filled, partial-canceled, filled, canceled, created
 start-date | string    | false    | -61d    | Start date, in format yyyy-mm-dd      | NA
@@ -4401,7 +4401,8 @@ API Key Permission：Read
 
 Parameter  | Data Type | Required | Default | Description
 ---------  | --------- | -------- | ------- | -----------
-currency    | string    | true     | NA      | Stable coin name (USDT/PAX/USDC/TUSD)
+currency    | string    | true     | NA      | Stable coin name (USDT/PAX/USDC/TUSD).Refer to `GET /v1/common/currencys`
+
 amount     | string    | true     | NA      | Amount of stable coin to exchange (the value must be an intger.)
 type        | string    | true    | NA      | Type of the exchange (buy/sell)
 
