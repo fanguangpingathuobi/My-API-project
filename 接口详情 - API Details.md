@@ -66,14 +66,6 @@ max-order-amt   | long      | Max order amount
 min-order-value | long      | Minimum order value (order value refers to ‘amount’ * ‘price’ defined in ‘v1/order/orders/place’ when it’s a limit order or ‘amount’ when it’s a buy-market order)
 leverage-ratio  | int       | The applicable leverage ratio
 
-## 获取所有币种
-
-此接口返回所有火币全球站支持的币种。
-
-
-```shell
-curl "https://api.huobi.pro/v1/common/currencys"
-```
 
 ## Get all Supported Currencies
 
@@ -104,8 +96,6 @@ No parameter is needed for this endpoint.
 ### Response Content
 
 <aside class="notice">The returned "data" field contains a list of string with each string represents a suppported currency.</aside>
-
-
 ## APIv2 - Currency & Chains
 
 API user could query static reference information for each currency, as well as its corresponding chain(s). (Public Endpoint)
@@ -222,7 +212,7 @@ curl "https://api.huobi.pro/v2/reference/currencies?currency=usdt"
 
 ### Status Code
 
-| Status Code | Error Message  | Scenario | 
+| Status Code | Error Message  | Scenario |
 | ---- | ----- | ---- |
 | 200| success | Request successful |
 | 500| error |  System error |
@@ -276,12 +266,9 @@ symbol    | string    | true     | NA      | The trading symbol to query | All t
 period    | string    | true     | NA      | The period of each candle   | 1min, 5min, 15min, 30min, 60min, 4hour, 1day, 1mon, 1week, 1year
 size      | integer   | false    | 150     | The number of data returns  | [1, 2000]
 
-<aside class="notice">当前 REST API 不支持自定义时间区间，如需要历史固定时间范围的数据，请参考 Websocket API 中的 K 线接口。</aside>
-
-<aside class="notice">To query hb10, put "hb10" at symbol position.</aside>
-
-<aside class="notice">K线周期以新加坡时间为基准开始计算，例如日K线的起始周期为新加坡时间0时-新加坡时间次日0时。</aside>
-
+<aside class="notice">This API doesn't support customized period, refer to Websocket K line API to get the emurated period value.</aside>
+<aside class="notice">To query HB10, put "hb10" at symbol position.</aside>
+<aside class="notice">The start time for candlesticks is based on Singapore time (GMT+8), for example, the duration for daily candlesticks is from 00:00:00 to 23:59:59 Singapore time.</aside>
 > The above command returns JSON structured like this:
 
 ```json
@@ -328,7 +315,7 @@ curl "https://api.huobi.pro/market/detail/merged?symbol=ethusdt"
 
 Parameter | Data Type | Required | Default | Description                  | Value Range
 --------- | --------- | -------- | ------- | -----------                  | --------
-symbol    | string    | true     | NA      | The trading symbol to query  | 取值参考/v1/common/symbols
+symbol    | string    | true     | NA      | The trading symbol to query  | Refer to /v1/common/symbols 
 
 > The above command returns JSON structured like this:
 
@@ -368,7 +355,6 @@ ask       | object    | The current best ask in format [price, quote volume]
 This endpoint retrieves the latest tickers for all supported pairs.
 
 <aside class="notice">The returned data object can contain large amount of tickers.</aside>
-
 ### HTTP Request
 
 `GET https://api.huobi.pro/market/tickers`
@@ -439,12 +425,11 @@ curl "https://api.huobi.pro/market/depth?symbol=btcusdt&type=step1"
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | The trading symbol to query                       | 取值参考/v1/common/symbols
+symbol    | string    | true     | NA                    | The trading symbol to query                       | Refer to /v1/common/symbols 
 depth     | integer   | false    | 20                    | The number of market depth to return on each side | 5, 10, 20
 type      | string    | true     | step0                 | Market depth aggregation level, details below     | step0, step1, step2, step3, step4, step5
 
 <aside class="notice">when type is set to "step0", the default value of "depth" is 150 instead of 20.</aside>
-
 **"type" Details**
 
 Value     | Description
@@ -512,7 +497,6 @@ step5     | Aggregation level = precision*100000
 ### Response Content
 
 <aside class="notice">The returned data object is under 'tick' object instead of 'data' object in the top level JSON</aside>
-
 Field     | Data Type | Description
 --------- | --------- | -----------
 ts        | integer   | The UNIX timestamp in milliseconds adjusted to Beijing time
@@ -537,7 +521,7 @@ curl "https://api.huobi.pro/market/trade?symbol=ethusdt"
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | The trading symbol to query                       | 取值参考/v1/common/symbols
+symbol    | string    | true     | NA                    | The trading symbol to query                       | Refer to /v1/common/symbols
 
 > The above command returns JSON structured like this:
 
@@ -561,7 +545,6 @@ symbol    | string    | true     | NA                    | The trading symbol to
 ### Response Content
 
 <aside class="notice">The returned data object is under 'tick' object instead of 'data' object in the top level JSON</aside>
-
 Parameter | Data Type | Description
 --------- | --------- | -----------
 id        | integer   | The unique trade id of this trade (to be obsoleted)
@@ -636,7 +619,6 @@ size      | integer   | false    | 1                | The number of data returns
 ### Response Content
 
 <aside class="notice">The returned data object is an array represents one recent timestamp; each timestamp object again is an array represents all trades occurred at this timestamp.</aside>
-
 Field     | Data Type | Description
 --------- | --------- | -----------
 id        | integer   | The unique trade id of this trade (to be obsoleted)
@@ -662,7 +644,7 @@ curl "https://api.huobi.pro/market/detail?symbol=ethusdt"
 
 Parameter | Data Type | Required | Default Value    | Description                   | Value Range
 --------- | --------- | -------- | -------------    | ----------                    | -----------
-symbol    | string    | true     | NA               | The trading symbol to query   | 取值参考/v1/common/symbols
+symbol    | string    | true     | NA               | The trading symbol to query   | Refer to /v1/common/symbols
 
 > The above command returns JSON structured like this:
 
@@ -683,7 +665,6 @@ symbol    | string    | true     | NA               | The trading symbol to quer
 ### Response Content
 
 <aside class="notice">The returned data object is under 'tick' object instead of 'data' object in the top level JSON</aside>
-
 Field     | Data Type | Description
 --------- | --------- | -----------
 id        | integer   | The UNIX timestamp in seconds as response id
@@ -700,7 +681,6 @@ version   | integer   | Internal data
 # Account
 
 <aside class="notice">All endpoints in this section require authentication</aside>
-
 ## Get all Accounts of the Current User
 
 API Key Permission：Read
@@ -718,7 +698,6 @@ curl "https://api.huobi.pro/v1/account/accounts"
 ### Request Parameters
 
 <aside class="notice">No parameter is available for this endpoint</aside>
-
 > The above command returns JSON structured like this:
 
 ```json
@@ -742,7 +721,6 @@ type                | string    | The type of this account | spot, margin, otc, 
 subtype                | string    | The type of sub account (applicable only for isolated margin accout)| The corresponding trading symbol (currency pair) the isolated margin is based on, e.g. btcusdt
 
 <aside class="notice">Margin/super-margin account will only be created after the first time asset transfer-in.</aside>
-
 ## Get Account Balance of a Specific Account
 
 API Key Permission：Read
@@ -762,7 +740,6 @@ curl "https://api.huobi.pro/v1/account/accounts/100009/balance"
 ### Request Parameters
 
 <aside class="notice">No parameter is needed for this endpoint</aside>
-
 > The above command returns JSON structured like this:
 
 ```json
@@ -827,13 +804,13 @@ curl "https://api.huobi.pro/v1/account/history?account-id=5260185"
 
 Parameter  | Required | Data Type | Description | Default Value                                  | Value Range
 ---------  | --------- | -------- | ------- | -----------                                   | ----------
-account-id     | true  | string | 账户编号,取值参考/v1/account/accounts      |     |  |
-currency      | false | string | 币种,取值参考/v1/common/currencys   |       |  |
-transact-types | false | string | Amount change types (multiple selection allowed)  | all     |trade,etf, transact-fee, deduction, transfer, credit, liquidation, interest, deposit-withdraw, withdraw-fee, exchange, other-types |
-start-time   | false | long | Far point of time of the query window (unix time in millisecond). Searching based on transact-time. The maximum size of the query window is 1 hour. The query window can be shifted within 30 days. | ((end-time) – 1hour)     | [((end-time) – 1hour), (end-time)]   |
-end-time     | false  | long | Near point of time of the query window (unix time in millisecond). Searching based on transact-time. The maximum size of the query window is 1 hour. The query window can be shifted within 30 days.  |  current-time    |[(current-time) – 29days,(current-time)]|
-sort     | false  | string | Sorting order  |  asc    |asc or desc|
-size     | false  | int | Maximum number of items in each response  |   100   |[1,500]|
+account-id     | true  | string | Account Id, refer to /v1/account/accounts |     |  
+currency      | false | string | Currency name |       | Refer to /v1/common/currencys 
+transact-types | false | string | Amount change types (multiple selection allowed)  | all     |trade,etf, transact-fee, deduction, transfer, credit, liquidation, interest, deposit-withdraw, withdraw-fee, exchange, other-types 
+start-time   | false | long | Far point of time of the query window (unix time in millisecond). Searching based on transact-time. The maximum size of the query window is 1 hour. The query window can be shifted within 30 days. | ((end-time) – 1hour)     | [((end-time) – 1hour), (end-time)]   
+end-time     | false  | long | Near point of time of the query window (unix time in millisecond). Searching based on transact-time. The maximum size of the query window is 1 hour. The query window can be shifted within 30 days.  |  current-time    |[(current-time) – 29days,(current-time)]
+sort     | false  | string | Sorting order  |  asc    |asc or desc
+size     | false  | int | Maximum number of items in each response  |   100   |[1,500]
 
 > The above command returns JSON structured like this:
 
@@ -905,9 +882,9 @@ The Rate Limit for this endpoint is 10 requests per minute.
 
 Parameter  | Data Type | Required | Description|Values
 ---------  | --------- | -------- | ------- | -----------
-currency|TRUE|String|currency name|币种,取值参考/v1/common/currencys. 
-amount|TRUE|Decimal|amount of fund to transfer|
-type|TRUE|String|type of the transfer|“futures-to-pro” or “pro-to-futures”
+currency|TRUE|String|Currency name|Refer to /v1/common/currencys. 
+amount|TRUE|Decimal|Amount of fund to transfer|
+type|TRUE|String|Type of the transfer|“futures-to-pro” or “pro-to-futures”
 
 > Response:
 
@@ -999,7 +976,6 @@ type       | string    | true     | The type of transfer                        
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Unique transfer id
@@ -1044,11 +1020,9 @@ curl "https://api.huobi.pro/v1/subuser/aggregate-balance"
 ### Request Parameters
 
 <aside class="notice">No parameter is needed for this endpoint</aside>
-
 ### Response Content
 
 <aside class="notice">The returned "data" object is a list of aggregated balances</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 currency            | string    | The currency of this balance
@@ -1074,7 +1048,6 @@ curl "https://api.huobi.pro/v1/account/accounts/10758899"
 ### Request Parameters
 
 <aside class="notice">No parameter is needed for this endpoint</aside>
-
 > The above command returns JSON structured like this:
 
 ```json
@@ -1106,7 +1079,6 @@ curl "https://api.huobi.pro/v1/account/accounts/10758899"
 ### Response Content
 
 <aside class="notice">The returned "data" object is a list of accounts under this sub-account</aside>
-
 Field               | Data Type | Description                           | Value Range
 ---------           | --------- | -----------                           | -----------
 id                  | integer   | Unique account id                     | NA
@@ -1125,8 +1097,6 @@ balance             | string    | The balance in the main currency unit | NA
 # Wallet (Deposit and Withdraw)
 
 <aside class="notice">All endpoints in this section require authentication</aside>
-
-
 ## APIv2 - Query Deposit Address
 
 API user could query deposit address of corresponding chain, for a specific crypto currency (except IOTA)
@@ -1134,7 +1104,6 @@ API user could query deposit address of corresponding chain, for a specific cryp
 API Key Permission：Read
 
 <aside class="notice"> The endpoint does not support deposit address querying for currency "IOTA" at this moment </aside>
-
 ### HTTP Request
 
 `GET https://api.huobi.pro/v2/account/deposit/address`
@@ -1179,7 +1148,7 @@ data                | object  |
 
 ### Status Code
 
-| Status Code | Error Message  | Scenario | 
+| Status Code | Error Message  | Scenario |
 | ---- | ----- | ---- |
 | 200| success | Request successful |
 | 500| error | System error |
@@ -1207,7 +1176,7 @@ curl "https://api.huobi.pro/v2/account/withdraw/quota?currency=btc"
 
 Field Name  | Data Type | Mandatory | Default Value | Description
 ---------  | --------- | -------- | ------- | -----------
-currency   | string    | true     | N/A      | 取值参考/v1/common/currencys
+currency   | string    | true     | N/A      | Refer to /v1/common/currencys
 
 > The above command returns JSON structured like this:
 
@@ -1253,7 +1222,7 @@ data                | object  |
 
 ### Status Code
 
-| Status Code | Error Message  | Scenario | 
+| Status Code | Error Message  | Scenario |
 | ---- | ----- | ---- |
 | 200| success | Request successful |
 | 500| error | System error |
@@ -1269,9 +1238,7 @@ API Key Permission：Withdraw
 This endpoint creates a withdraw request from your spot trading account to an external address.
 
 <aside class="notice">If user has chosen fast withdraw preferred in  <a href='https://www.hbg.com/en-us/user_center/uc_setting/'>Settings </a>, the withdraw requests submitted via this endpoint would choose 'fast withdraw' as preferred channel. </aside>
-
 <aside class="notice">Only support the existed addresses in your  <a href='https://www.hbg.com/en-us/withdraw_address/'>withdraw address list </a> </aside>
-
 ### HTTP Request
 
 `POST https://api.huobi.pro/v1/dw/withdraw/api/create`
@@ -1291,7 +1258,7 @@ curl -X POST -H "Content-Type: application/json" "https://api.huobi.pro/v1/dw/wi
 Parameter  | Data Type | Required | Default | Description
 ---------  | --------- | -------- | ------- | -----------
 address    | string    | true     | NA      | The desination address of this withdraw
-currency   | string    | true     | NA      | 取值参考/v1/common/currencys
+currency   | string    | true     | NA      | Refer to /v1/common/currencys
 amount     | string    | true     | NA      | The amount of currency to withdraw
 fee        | string    | true    | NA      | The fee to pay with this withdraw
 chain      | string    | false    | NA      | set as "usdt" to withdraw USDT to OMNI, set as "trc20usdt" to withdraw USDT to TRX
@@ -1308,14 +1275,11 @@ addr-tag   | string    | false    | NA      | A tag specified for this address
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Transfer id
 
 <aside class="notice">All new transfer id will be incremental to the previous ids. This allows search by transfer id sequences</aside>
-
-
 ## Cancel a Withdraw Request
 
 API Key Permission：Withdraw
@@ -1335,7 +1299,6 @@ curl -X POST "https://api.huobi.pro/v1/dw/withdraw-virtual/1000/cancel"
 ### Request Parameters
 
 <aside class="notice">No parameter is needed for this endpoint</aside>
-
 > The above command returns JSON structured like this:
 
 ```json
@@ -1345,7 +1308,6 @@ curl -X POST "https://api.huobi.pro/v1/dw/withdraw-virtual/1000/cancel"
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Parameter           | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Withdraw cancel id
@@ -1444,9 +1406,7 @@ orphan          | Confirmed but currently in an orphan branch
 # Trading
 
 <aside class="notice">All endpoints in this section require authentication</aside>
-
 <aside class="warning">When trade with margin loan from your margin account, "account-id" parameter should be set to margin account id, "source" parameter should be set to "margin-api"; When trade with super-margin loan from your super-margin account, "account-id" parameter should be set to super-margin account id, "source" parameter should be set to "super-margin-api"</aside>
-
 ## Place a New Order
 
 API Key Permission：Trade
@@ -1474,15 +1434,15 @@ curl -X POST -H "Content-Type: application/json" "https://api.huobi.pro/v1/order
 
 Parameter  | Data Type | Required | Default | Description                               | Value Range
 ---------  | --------- | -------- | ------- | -----------                               | -----------
-account-id | string    | true     | NA      | The account id used for this trade        | 账户ID，取值参考/v1/common/symbols 
-symbol     | string    | true     | NA      | The trading symbol to trade               | 取值参考
+account-id | string    | true     | NA      | The account id used for this trade        | Refer to /v1/common/symbols 
+symbol     | string    | true     | NA      | The trading symbol to trade               | Refer to 
 type       | string    | true     | NA      | The order type                            | buy-market, sell-market, buy-limit, sell-limit, buy-ioc, sell-ioc, buy-limit-maker, sell-limit-maker, buy-stop-limit, sell-stop-limit
 amount     | string    | true     | NA      | order size (for market buy order type, it's order value) | NA
 price      | string    | false    | NA      | The limit price of limit order, only needed for limit order   | NA
 source     | string    | false    | api     | When trade with margin use 'margin-api'; When trade with super-margin use 'super-margin-api';    | api, margin-api,super-margin-api
 client-order-id| string    | false    | NA     | Client order ID (maximum 64-character length, to be unique within 24 hours)  | 
-stop-price    | string          | false | NA    | Trigger price of stop limit order   | |
-operator       | string       | false  | NA   | operation charactor of stop price   | gte – greater than and equal (>=), lte – less than and equal (<=) |
+stop-price    | string          | false | NA    | Trigger price of stop limit order   | 
+operator       | string       | false  | NA   | operation charactor of stop price   | gte – greater than and equal (>=), lte – less than and equal (<=) 
 
 > The above command returns JSON structured like this:
 
@@ -1493,7 +1453,6 @@ operator       | string       | false  | NA   | operation charactor of stop pric
 ### Response Content
 
 <aside class="notice">The returned data object is a single string which represents the order id</aside>
-
 If client order ID duplicates with a previous order (within 24 hours), the endpoint responds that previous order's client order ID.
 
 
@@ -1505,7 +1464,6 @@ API Key Permission：Trade
 This endpoint submit a request to cancel an order.
 
 <aside class="warning">This only submit the cancel request, the actual result of the canel request needs to be checked by order status or match result endpoints</aside>
-
 ### HTTP Request
 
 `POST https://api.huobi.pro/v1/order/orders/{order-id}/submitcancel`
@@ -1529,7 +1487,6 @@ No parameter is needed for this endpoint.
 ### Response Content
 
 <aside class="notice">The returned data object is a single string which represents the order id</aside>
-
 ### Error Code
 
 > Response:
@@ -1560,7 +1517,6 @@ API Key Permission：Trade
 This endpoint submit a request to cancel an order.
 
 <aside class="warning">This only submit the cancel request, the actual result of the canel request needs to be checked by order status or match result endpoints</aside>
-
 ### HTTP Request
 
 `POST https://api.huobi.pro/v1/order/orders/submitCancelClientOrder`
@@ -1618,8 +1574,8 @@ curl "https://api.huobi.pro/v1/order/openOrders?account-id=100009&symbol=btcusdt
 
 Parameter  | Data Type | Required | Default | Description                             | Value Range
 ---------  | --------- | -------- | ------- | -----------                             | -----------
-account-id | string    | true    | NA      | The account id used for this trade      | 取值参考 /v1/account/accounts
-symbol     | string    | true    | NA      | The trading symbol to trade             | 取值参考 /v1/common/symbols
+account-id | string    | true    | NA      | The account id used for this trade      | Refer to  /v1/account/accounts
+symbol     | string    | true    | NA      | The trading symbol to trade             | Refer to  /v1/common/symbols
 side       | string    | false    | NA      | Filter on the direction of the trade    | buy, sell
 from       | string    | false    | NA      |  start order ID the searching to begin with   |
 direct       | string    | false (if field "from" is defined, this field "direct" becomes mandatory)   | NA      |  searching direction    | prev - in ascending order from the start order ID; next - in descending order from the start order ID
@@ -1986,7 +1942,6 @@ No parameter is needed for this endpoint.
 ### Response Content
 
 <aside class="notice">The return data contains a list and each item in the list represents a match result</aside>
-
 Parameter           | Data Type | Description
 ---------           | --------- | -----------
 id                  | integer   | Internal id
@@ -2085,7 +2040,7 @@ operator|string|operation character of stop price
 
 |err-code| scenarios|
 |--------|---------------------------------------------------------------|
-|invalid_interval| Start date is later than end date; the date between start date and end date is greater than 2 days| 
+|invalid_interval| Start date is later than end date; the date between start date and end date is greater than 2 days|
 |invalid_start_date| Start date is a future date; or start date is earlier than 180 days ago.|
 |invalid_end_date| end date is a future date; or end date is earlier than 180 days ago.|
 
@@ -2170,7 +2125,7 @@ symbol         | string    | Trading symbol
 stop-price|string|trigger price of stop limit order
 operator|string|operation character of stop price
 type}              | string    | Order type (buy-market, sell-market, buy-limit, sell-limit, buy-ioc, sell-ioc, buy-limit-maker, sell-limit-maker, buy-stop-limit, sell-stop-limit)
-next-time               | long    | Next query “start-time” (in response of “direct” = prev), Next query “end-time” (in response of “direct” = next). Note: Only when the total number of items in the search result exceeded the limitation defined in “size”, this field exists. UTC time in millisecond注：仅在检索出的总条目数量超出size字段限定时，此返回字段存在。 |UTC time in millisecond   |
+next-time               | long    | Next query “start-time” (in response of “direct” = prev), Next query “end-time” (in response of “direct” = next). Note: Only when the total number of items in the search result exceeded the limitation defined in “size”, this field exists. UTC time in millisecond. 
 
 
 ## Search Match Results
@@ -2226,7 +2181,6 @@ size       | int       | false    | 100     | The number of orders to return    
 ### Response Content
 
 <aside class="notice">The return data contains a list and each item in the list represents a match result</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 id                  | integer   | Internal id
@@ -2248,7 +2202,7 @@ fee-deduct-currency      | string   | deduction type: ht or hbpoint.
 
 |err-code| scenarios|
 |--------|---------------------------------------------------------------|
-|invalid_interval| Start date is later than end date; the date between start date and end date is greater than 2 days| 
+|invalid_interval| Start date is later than end date; the date between start date and end date is greater than 2 days|
 |invalid_start_date| Start date is a future date; or start date is earlier than 61 days ago.|
 |invalid_end_date| end date is a future date; or end date is earlier than 61 days ago.|
 
@@ -2272,7 +2226,7 @@ curl "https://api.huobi.pro/v1/fee/fee-rate/get?symbols=btcusdt,ethusdt,ltcusdt"
 
 Parameter | Data Type | Required | Default | Description                 | Value Range
 --------- | --------- | -------- | ------- | -----------                 | -----------
-symbols    | string    | true     | NA      | The trading symbols to query, separated by comma | 取值参考/v1/common/symbols
+symbols    | string    | true     | NA      | The trading symbols to query, separated by comma | Refer to /v1/common/symbols
 
 > Response:
 
@@ -2326,9 +2280,7 @@ base-too-many-symbol|	exceeded maximum number of symbols|	string|	-
 # Margin Loan (isolated margin mode)
 
 <aside class="notice">All endpoints in this section require authentication</aside>
-
 <aside class="notice">Currently loan only supports base currency of USDT, HUSD, and BTC</aside>
-
 ## Transfer Asset from Spot Trading Account to Isolated Margin Account
 
 API Key Permission：Trade
@@ -2352,8 +2304,8 @@ curl -X POST -H 'Content-Type: application/json' "https://api.huobi.pro/v1/dw/tr
 
 Parameter  | Data Type | Required | Default | Description
 ---------  | --------- | -------- | ------- | -----------
-symbol     | string    | true     | NA      | 取值参考/v1/common/symbols
-currency   | string    | true     | NA      | 取值参考/v1/common/currencys
+symbol     | string    | true     | NA      | Refer to /v1/common/symbols
+currency   | string    | true     | NA      | Refer to /v1/common/currencys
 amount     | string    | true     | NA      | The amount of currency to transfer
 
 > The above command returns JSON structured like this:
@@ -2365,7 +2317,6 @@ amount     | string    | true     | NA      | The amount of currency to transfer
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Transfer id
@@ -2393,8 +2344,8 @@ curl -X POST -H 'Content-Type: application/json' "https://api.huobi.pro/v1/dw/tr
 
 Parameter  | Data Type | Required | Default | Description
 ---------  | --------- | -------- | ------- | -----------
-symbol     | string    | true     | NA      | 取值参考/v1/common/symbols
-currency   | string    | true     | NA      | 取值参考/v1/common/currencys
+symbol     | string    | true     | NA      | Refer to /v1/common/symbols
+currency   | string    | true     | NA      | Refer to /v1/common/currencys
 amount     | string    | true     | NA      | The amount of currency to transfer
 
 > The above command returns JSON structured like this:
@@ -2406,7 +2357,6 @@ amount     | string    | true     | NA      | The amount of currency to transfer
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Transfer id
@@ -2507,7 +2457,6 @@ amount     | string    | true     | NA      | The amount of currency to borrow
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Margin order id
@@ -2546,7 +2495,6 @@ amount     | string    | true     | NA      | The amount of currency to repay
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Margin order id
@@ -2569,7 +2517,7 @@ curl "https://api.huobi.pro/v1/margin/load-orders?symbol=ethusdt"
 
 Parameter  | Data Type | Required | Default | Description                                   | Value Range
 ---------  | --------- | -------- | ------- | -----------                                   | ----------
-symbol     | string    | true     | NA      | The trading symbol to trade                   | 取值参考/v1/common/symbols
+symbol     | string    | true     | NA      | The trading symbol to trade                   | Refer to /v1/common/symbols
 states     | string    | false    | NA      | Order status  | created,accrual,cleared,invalid
 start-date | string    | false    | -61d    | Search starts date, in format yyyy-mm-dd      | NA
 end-date   | string    | false    | today   | Search ends date, in format yyyy-mm-dd        | NA
@@ -2636,7 +2584,7 @@ curl "https://api.huobi.pro/v1/margin/accounts/balance?symbol=btcusdt"
 
 Parameter  | Data Type | Required | Default | Description
 ---------  | --------- | -------- | ------- | -----------
-symbol     | string    | true     | NA      | 取值参考/v1/common/symbols
+symbol     | string    | true     | NA      | Refer to /v1/common/symbols
 sub-uid     | int    | false     | If not entered, by default it returns margin account details of current user      | Sub user ID (mandatory field while parent user querying sub user’s margin account details)
 
 > The above command returns JSON structured like this:
@@ -2702,11 +2650,8 @@ list                | array         | The list of margin accounts and their deta
 # Margin Loan (cross margin mode)
 
 <aside class="notice">All endpoints in this section require authentication</aside>
-
 <aside class="notice">Currently loan only supports base currency of USDT and BTC</aside>
-
 <aside class="notice">Once completed a margin loan or transfer, please wait for 10 seconds before requesting for next margin loan or transfer.</aside>
-
 ## Transfer Asset from Spot Trading Account to Cross Margin Account
 
 API Key Permission：Trade
@@ -2744,7 +2689,6 @@ amount     | string    | true     | NA      | Transfer amount
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Transfer id
@@ -2786,7 +2730,6 @@ amount     | string    | true     | NA      | Transfer amount
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Transfer id
@@ -2978,7 +2921,6 @@ amount     | string    | true     | NA      | The amount of currency to borrow
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | integer   | Margin order id
@@ -3020,7 +2962,6 @@ amount     | string    | true     | NA      | The amount of currency to repay
 ### Response Content
 
 <aside class="notice">The return data contains a single value instead of an object</aside>
-
 Field               | Data Type | Description
 ---------           | --------- | -----------
 data                | null   | NA
@@ -3205,7 +3146,6 @@ When client receives this heartbeat message, it should response with a matching 
 > {"pong": 1492420473027} (market data)
 
 <aside class="warning">After the server sent two consecutive heartbeat messages without receiving at least one matching "pong" response from a client, then right before server sends the next "ping" heartbeat, the server will disconnect this client</aside>
-
 ### Subscribe to Topic
 
 To receive data you have to send a "sub" message first.
@@ -3396,7 +3336,6 @@ high      | float     | High price during the interval
 vol       | float     | Aggregated trading value during the interval (in quote currency)
 
 <aside class="notice">When symbol is set to "hb10" or "huobi10", amount, count, and vol will always have the value of 0</aside>
-
 ### Pull Request
 
 Pull request is supported with extra parameters to define the range. The maximum number of ticks in each response is 300.
@@ -3436,7 +3375,7 @@ This topic sends the latest market by price order book in snapshot mode at 1-sec
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                   | 取值参考/v1/common/symbols
+symbol    | string    | true     | NA                    | Trading symbol                   | Refer to /v1/common/symbols
 type      | string    | true     | step0                 | Market depth aggregation level, details below     | step0, step1, step2, step3, step4, step5
 
 **"type" Details**
@@ -3488,7 +3427,6 @@ While type is set as ‘step1’, ‘step2’, ‘step3’, ‘step4’, or ‘s
 ### Update Content
 
 <aside class="notice">Under 'tick' object there is a list of bids and a list of asks</aside>
-
 Field     | Data Type | Description
 --------- | --------- | -----------
 bids      | object    | The current all bids in format [price, quote volume]
@@ -3497,7 +3435,6 @@ version   | integer   | Internal data
 ts        | integer   | The UNIX timestamp in milliseconds adjusted to Beijing time
 
 <aside class="notice">When symbol is set to "hb10" amount, count, and vol will always have the value of 0</aside>
-
 ### Pull Request
 
 Pull request is supported.
@@ -3530,7 +3467,7 @@ While any of best bid, best ask, best bid size, best ask size is changing, subsc
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                   | 取值参考/v1/common/symbols
+symbol    | string    | true     | NA                    | Trading symbol                   | Refer to /v1/common/symbols
 
 > Response
 
@@ -3593,7 +3530,7 @@ This topic sends the latest completed trade. It updates in tick by tick mode.
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                     | 取值参考/v1/common/symbols
+symbol    | string    | true     | NA                    | Trading symbol                     | Refer to /v1/common/symbols
 
 > Response
 
@@ -3673,7 +3610,7 @@ This topic sends the latest market stats with 24h summary. It updates in snapsho
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                     | 取值参考/v1/common/symbols
+symbol    | string    | true     | NA                    | Trading symbol                     | Refer to /v1/common/symbols
 
 > Response
 
@@ -3763,7 +3700,6 @@ When client receives this heartbeat message, it should response with a matching 
 }
 
 <aside class="warning">After the server sent THREE consective heartbeat messages without receiving at least one matching "pong" response from a client, then right before server sends the next "ping" heartbeat, the server will disconnect this client</aside>
-
 **Prior to 2019/07/08**
 
 After connected to Huobi's Websocket server, the server will send heartbeat periodically (at 30s interval). The heartbeat message will have an integer in it, e.g.
@@ -3781,7 +3717,6 @@ When client receives this heartbeat message, it should response with a matching 
 }
 
 <aside class="warning">After the server sent two consective heartbeat message without receiving at least one matching "pong" response from a client, then right before server sends the next "ping" heartbeat, the server will disconnect this client</aside>
-
 ### Subscribe to Topic
 
 To receive data you have to send a "sub" message first.
@@ -3929,7 +3864,6 @@ Parameter | Data Type | Required | Default Value         | Description          
 model     | string    | false    | 0                     | Whether to include frozen balance                 | 1 to include frozen balance, 0 to not
 
 <aside class="notice">You may subscribe to this topic with different model to get updates in both models</aside>
-
 > Response
 
 ```json
@@ -4085,7 +4019,7 @@ This topic publishes all order updates of the current account. By comparing with
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | Trading symbol                       | 取值参考/v1/common/symbols， 支持通配符 "*".
+symbol    | string    | true     | NA                    | Trading symbol                       | Refer to /v1/common/symbols, wild card (\*) is supported 
 
 
 
@@ -4267,7 +4201,7 @@ Search past and open orders based on searching criteria.
 Parameter  | Data Type | Required | Default | Description                                   | Value Range
 ---------  | --------- | -------- | ------- | -----------                                   | ----------
 account-id | int       | true     | NA      | Account id                        | NA
-symbol     | string    | true     | NA      | Trading symbol                | 取值参考/v1/common/symbols
+symbol     | string    | true     | NA      | Trading symbol                | Refer to /v1/common/symbols
 types      | string    | false    | NA      | Order type   | buy-market, sell-market, buy-limit, sell-limit, buy-ioc, sell-ioc, buy-limit-maker, sell-limit-maker, buy-stop-limit, sell-stop-limit
 states     | string    | true    | NA      | Order state  | submitted, partial-filled, partial-canceled, filled, canceled, created
 start-date | string    | false    | -61d    | Start date, in format yyyy-mm-dd      | NA
@@ -4277,7 +4211,7 @@ direct     | string    | false    | next    | Searching direction when 'from' is
 size       | string       | false    | 100     | Number of items in each return               | [1, 100]
 
 ### Response
-  
+
 > Successful
 
 ```json
@@ -4358,7 +4292,7 @@ topic      |false      |string   |topic to request "orders.detail"  |||
 order-id   |true       |string   |order ID    ||| 
 
 ### Response
-  
+
 > Successful
 
 ```json
@@ -4696,10 +4630,3 @@ rate                  | decimal   | Fee rate
 fee                   | decimal   | The actual fee amount
 point_card_amount     | decimal   | Discount from point card
 obtain_currency_list  | array     | For creation this is the amount for ETF created. For redemption this is the list and amount of underlying assets obtained.
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
