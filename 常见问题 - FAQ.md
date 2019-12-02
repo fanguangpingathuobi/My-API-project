@@ -3,17 +3,18 @@
 ## API Announcements
 Huobi will publish API announcement in advance for any API change, please subscribe our announcements so that you can get latest update. 
 
-You can click <a href='https://huobiglobal.zendesk.com/hc/en-us/sections/360000070201-API-Announcements'>Here </a>  to subscribe the announcements.
-
-How to subscribe: Login to API Announcements page, click "Follow" button in the top right of the page, then choose the type you want to follow. After you subscribe, the button will changed to "Following". If you don't have any account, you need to register first. 
+How to subscribe: Login to [API Announcements page](https://huobiglobal.zendesk.com/hc/en-us/sections/360000070201-API-Announcements), click "Follow" button in the top right of the page, then choose the type you want to follow. After you subscribe, the button will changed to "Following". If you don't have any account, you need to register first. 
 
 ## Access and Authentication
 
 ### Q1：How many API Keys one user can apply?
-A:  Every parent user can create 5 API Keys, and each API Key can be granted with either of 3 permissions: **read**, **trade** and **withdraw**.
-Each parent user could create up to 200 sub users, and each sub user could create 5 API Keys, each API key can be granted with either of 2 permissions: **read** and **transact**.
+A:  Every account can create 5 API Keys, and each API Key can be granted with 3 permissions: **read**, **trade** and **withdraw**.
+Each account could create up to 200 sub accounts, and each sub account could create 5 API Keys, each API key can be granted with 2 permissions: **read** and **transact**.
+
 1) Read permission: It is used to query data, for example, **query orders**, **query trades**. 
+
 2) Trade permission: it is used to **place order**, **cancel order** and **transfer**.
+
 3) Withdraw permission: it is used to **withdraw**, **cancel withdraw**.
 
 ### Q2：Why APIs are always disconnected or timeout?
@@ -41,6 +42,7 @@ api.huobi.pro\n
 AccessKeyId=rfhxxxxx-950000847-boooooo3-432c0&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2019-10-28T07%3A28%3A38
 ```
 Please check whether you follow below rules:
+
 1) The parameter in signature text should be ordered by ASCII, for example below is the original parameters:
 
 ```
@@ -65,11 +67,17 @@ order-id=1234567890
 - The timestamp should be formated as `YYYY-MM-DDThh:mm:ss` and after encoded it should be like `2017-05-11T15%3A19%3A30`  
 
 3) The signature should be base64 encoded.
+
 4) The parameter for Get request should be included in signature request.
+
 5) The Timestamp should be UTC time and the format should be YYYY-MM-DDTHH:mm:ss.
+
 6) The time difference between your timestamp and standard should be less than 1 minute.
+
 7) The message body doesn't need URI encoded if you are using WebSocket for authentication.
+
 8) The host in signature text should be the same as the host in your API request.
+
 9) The hidden text in API Key and Secret Key may have impact on the signature.
 
 - Right now the official SDK supports 3 language: Java, Python3 and C++, you can choose the one that suitable for you.
@@ -155,7 +163,7 @@ A: Transaction fee can be paid from either of below.
 
 
 ### Q7: What is the difference between 'match-id' and 'trade-id' in matching result?
-A: The `trade-id` is the unique identifier for each trade. If a taker's order got matched with 3 maker's orders at the same time, it generates 3 trade IDs but only one match ID.
+A: The `match-id` is the identity for order matching, while the `trade-id` is the unique identifier for each trade. One `match-id` may be correlated with multiple `trade-id`, or no `trade-id`(if the order is cancelled). For example, if a taker's order got matched with 3 maker's orders at the same time, it generates 3 trade IDs but only one match ID.
 
 ### Q8: Why the order submission could be rejected even though the order price is set as same as current best bid (or best ask)?
 A: For some extreme illiquid trading symbols, the best quote price at particular time might be far away from last trade price. But the price limit is actually based on last trade price which could possibly exclude best quote price from valid range for any new order.
@@ -174,8 +182,10 @@ A：USDT locates on multiple chains, therefore the withdraw order should clearly
 | OMNI            | `usdt`          |
 | TRX             | `trc20usdt`     |
 
-If leaving the field empty, default target chain is `ERC20`. Or you can explicitly set the chain to `usdterc20`.
+If leaving the field empty, default target chain is `ERC20`, or you can explicitly set the chain to `usdterc20`.
+
 If the target chain is `OMNI` or `TRX`, the field value should be `usdt` or `trc20usdt`.
+
 The full chain name list for all currencies can be retrieved from endpoint `GET /v2/reference/currencies`.
 
 ### Q3：How to specify 'fee' when creating a withdraw request?
