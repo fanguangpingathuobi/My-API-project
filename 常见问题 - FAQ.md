@@ -86,8 +86,6 @@ order-id=1234567890
 <a href='https://github.com/HuobiRDCenter/huobi_Java/blob/master/java_signature_demo.md'>JAVA signature example</a>   
 <a href='https://github.com/HuobiRDCenter/huobi_Cpp/blob/master/examples/cpp_signature_demo.md'>C++ signature example</a>   
 
-- You can also refer to the signature guide: https://huobiapi.github.io/docs/spot/v1/cn/#c64cd15fdc
-
 ### Q6：Why the API return 'gateway-internal-error'?
 A：Please check below possible reasons:
 - Check the `account-id`, it could be returned from `GET /v1/account/accounts`.
