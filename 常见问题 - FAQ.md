@@ -168,6 +168,12 @@ A: The `match-id` is the identity for order matching, while the `trade-id` is th
 ### Q8: Why the order submission could be rejected even though the order price is set as same as current best bid (or best ask)?
 A: For some extreme illiquid trading symbols, the best quote price at particular time might be far away from last trade price. But the price limit is actually based on last trade price which could possibly exclude best quote price from valid range for any new order.
 
+### Q9: How to retrieve the trading symbols for margin trade
+
+A: You can get details from Rest API ` GET /v1/common/symbols`. The `leverage-ratio` represents the isolated-margin ratio. The `super-margin-leverage-ratio` represents the cross-margin.
+
+The value `0` indcates that the trading symbols doesn't support margin trading.
+
 ## Deposit and Withdraw
 
 ### Q1：Why the API returns error 'api-not-support-temp-addr' when withdrawing?
