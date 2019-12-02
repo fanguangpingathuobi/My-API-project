@@ -317,7 +317,7 @@ curl "https://api.huobi.pro/market/detail/merged?symbol=ethusdt"
 
 Parameter | Data Type | Required | Default | Description                  | Value Range
 --------- | --------- | -------- | ------- | -----------                  | --------
-symbol    | string    | true     | NA      | The trading symbol to query  | Refer to /v1/common/symbols 
+symbol    | string    | true     | NA      | The trading symbol to query  | All supported trading symbol, e.g. btcusdt, bccbtc.Refer to `/v1/common/symbols` 
 
 > The above command returns JSON structured like this:
 
@@ -428,7 +428,7 @@ curl "https://api.huobi.pro/market/depth?symbol=btcusdt&type=step1"
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | The trading symbol to query                       | Refer to /v1/common/symbols 
+symbol    | string    | true     | NA                    | The trading symbol to query                       | Refer to `GET /v1/common/symbols` 
 depth     | integer   | false    | 20                    | The number of market depth to return on each side | 5, 10, 20
 type      | string    | true     | step0                 | Market depth aggregation level, details below     | step0, step1, step2, step3, step4, step5
 
@@ -526,7 +526,7 @@ curl "https://api.huobi.pro/market/trade?symbol=ethusdt"
 
 Parameter | Data Type | Required | Default Value         | Description                                       | Value Range
 --------- | --------- | -------- | -------------         | -----------                                       | -----------
-symbol    | string    | true     | NA                    | The trading symbol to query                       | Refer to /v1/common/symbols
+symbol    | string    | true     | NA                    | The trading symbol to query                       | Refer to `GET /v1/common/symbols`
 
 > The above command returns JSON structured like this:
 
@@ -576,7 +576,7 @@ curl "https://api.huobi.pro/market/history/trade?symbol=ethusdt&size=2"
 
 Parameter | Data Type | Required | Default Value    | Description                   | Value Range
 --------- | --------- | -------- | -------------    | ----------                    | -----------
-symbol    | string    | true     | NA               | The trading symbol to query   | All supported trading symbols, e.g. btcusdt, bccbtc
+symbol    | string    | true     | NA               | The trading symbol to query   | All supported trading symbol, e.g. btcusdt, bccbtc.Refer to `GET /v1/common/symbols`
 size      | integer   | false    | 1                | The number of data returns    | [1, 2000]
 
 > The above command returns JSON structured like this:
@@ -816,7 +816,7 @@ curl "https://api.huobi.pro/v1/account/history?account-id=5260185"
 
 Parameter  | Required | Data Type | Description | Default Value                                  | Value Range
 ---------  | --------- | -------- | ------- | -----------                                   | ----------
-account-id     | true  | string | Account Id, refer to /v1/account/accounts |     |  
+account-id     | true  | string | Account Id, refer to `GET /v1/account/accounts` |     |  
 currency      | false | string | Currency name |       | Refer to /v1/common/currencys 
 transact-types | false | string | Amount change types (multiple selection allowed)  | all     |trade,etf, transact-fee, deduction, transfer, credit, liquidation, interest, deposit-withdraw, withdraw-fee, exchange, other-types 
 start-time   | false | long | Far point of time of the query window (unix time in millisecond). Searching based on transact-time. The maximum size of the query window is 1 hour. The query window can be shifted within 30 days. | ((end-time) – 1hour)     | [((end-time) – 1hour), (end-time)]   
@@ -894,7 +894,7 @@ The Rate Limit for this endpoint is 10 requests per minute.
 
 Parameter  | Data Type | Required | Description|Values
 ---------  | --------- | -------- | ------- | -----------
-currency|TRUE|String|Currency name|Refer to /v1/common/currencys. 
+currency|TRUE|String|Currency name|Refer to `GET /v1/common/currencys`
 amount|TRUE|Decimal|Amount of fund to transfer|
 type|TRUE|String|Type of the transfer|“futures-to-pro” or “pro-to-futures”
 
@@ -1135,7 +1135,7 @@ curl "https://api.huobi.pro/v2/account/deposit/address?currency=btc"
 
 Field Name  | Data Type | Mandatory | Default Value | Description
 ---------  | --------- | -------- | ------- | -----------
-currency   | string    | true     | N/A      | Crypto currency
+currency   | string    | true     | N/A      | Crypto currency,refer to `GET /v1/common/currencys`
 
 > The above command returns JSON structured like this:
 
@@ -1195,7 +1195,7 @@ curl "https://api.huobi.pro/v2/account/withdraw/quota?currency=btc"
 
 Field Name  | Data Type | Mandatory | Default Value | Description
 ---------  | --------- | -------- | ------- | -----------
-currency   | string    | true     | N/A      | Refer to /v1/common/currencys
+currency   | string    | true     | N/A      | Crypto currency,refer to `GET /v1/common/currencys`
 
 > The above command returns JSON structured like this:
 
@@ -1278,10 +1278,10 @@ curl -X POST -H "Content-Type: application/json" "https://api.huobi.pro/v1/dw/wi
 Parameter  | Data Type | Required | Default | Description
 ---------  | --------- | -------- | ------- | -----------
 address    | string    | true     | NA      | The desination address of this withdraw
-currency   | string    | true     | NA      | Refer to /v1/common/currencys
+currency   | string    | true     | NA      | Crypto currency,refer to `GET /v1/common/currencys`
 amount     | string    | true     | NA      | The amount of currency to withdraw
 fee        | string    | true    | NA      | The fee to pay with this withdraw
-chain      | string    | false    | NA      | set as "usdt" to withdraw USDT to OMNI, set as "trc20usdt" to withdraw USDT to TRX
+chain      | string    | false    | NA      |Refer to`GET /v2/reference/currencies`.Set as "usdt" to withdraw USDT to OMNI, set as "trc20usdt" to withdraw USDT to TRX
 addr-tag   | string    | false    | NA      | A tag specified for this address
 
 > The above command returns JSON structured like this:
@@ -1459,8 +1459,8 @@ curl -X POST -H "Content-Type: application/json" "https://api.huobi.pro/v1/order
 
 Parameter  | Data Type | Required | Default | Description                               | Value Range
 ---------  | --------- | -------- | ------- | -----------                               | -----------
-account-id | string    | true     | NA      | The account id used for this trade        | Refer to /v1/common/symbols 
-symbol     | string    | true     | NA      | The trading symbol to trade               | Refer to 
+account-id | string    | true     | NA      | The account id used for this trade        | Refer to `GET /v1/account/accounts` 
+symbol     | string    | true     | NA      | The trading symbol to trade               | Refer to `GET /v1/common/symbols` 
 type       | string    | true     | NA      | The order type                            | buy-market, sell-market, buy-limit, sell-limit, buy-ioc, sell-ioc, buy-limit-maker, sell-limit-maker, buy-stop-limit, sell-stop-limit
 amount     | string    | true     | NA      | order size (for market buy order type, it's order value) | NA
 price      | string    | false    | NA      | The limit price of limit order, only needed for limit order   | NA
@@ -1603,8 +1603,8 @@ curl "https://api.huobi.pro/v1/order/openOrders?account-id=100009&symbol=btcusdt
 
 Parameter  | Data Type | Required | Default | Description                             | Value Range
 ---------  | --------- | -------- | ------- | -----------                             | -----------
-account-id | string    | true    | NA      | The account id used for this trade      | Refer to  /v1/account/accounts
-symbol     | string    | true    | NA      | The trading symbol to trade             | Refer to  /v1/common/symbols
+account-id | string    | true    | NA      | The account id used for this trade      | Refer to `GET /v1/account/accounts`
+symbol     | string    | true    | NA      | The trading symbol to trade             | Refer to `GET /v1/common/symbols`
 side       | string    | false    | NA      | Filter on the direction of the trade    | buy, sell
 from       | string    | false    | NA      |  start order ID the searching to begin with   |
 direct       | string    | false (if field "from" is defined, this field "direct" becomes mandatory)   | NA      |  searching direction    | prev - in ascending order from the start order ID; next - in descending order from the start order ID
@@ -1670,8 +1670,8 @@ curl -X POST -H 'Content-Type: application/json' "https://api.huobi.pro/v1/order
 
 Parameter  | Data Type | Required | Default | Description                             | Value Range
 ---------  | --------- | -------- | ------- | -----------                             | -----------
-account-id | string    | true    | NA      | The account id used for this cancel     | NA
-symbol     | string    | false    | NA      | The trading symbol list (maximum 10 symbols, separated by comma, default value all symbols)            | All supported trading symbols, e.g. btcusdt, bccbtc
+account-id | string    | true    | NA      | The account id used for this cancel     | Refer to `GET /v1/account/accounts`
+symbol     | string    | false    | NA      | The trading symbol list (maximum 10 symbols, separated by comma, default value all symbols)            | All supported trading symbol, e.g. btcusdt, bccbtc.Refer to `GET /v1/common/symbols`
 side       | string    | false    | NA      | Filter on the direction of the trade    | buy, sell
 size       | int       | false    | 100     | The number of orders to cancel          | [1, 100]
 
@@ -2101,7 +2101,7 @@ Note: queriable range should be within past 1 day for cancelled order (state = "
 
 Parameter  | Required | Data Type | Description | Default Value                                  | Value Range
 ---------  | --------- | -------- | ------- | -----------                                   | ----------
-symbol     | false  | string | The trading symbol to trade      |all      |All supported trading symbols, e.g. btcusdt, bccbtc  |
+symbol     | false  | string | The trading symbol to trade      |all      |All supported trading symbol, e.g. btcusdt, bccbtc.Refer to `GET /v1/common/symbols` |
 start-time      | false | long | Start time (included)   |The time 48 hours ago      |UTC time in millisecond |
 end-time | false | long | End time (included)  | The query time     |UTC time in millisecond |
 direct   | false | string | Direction of the query. (Note: If the total number of items in the search result is within the limitation defined in “size”, this field does not take effect.)| next     |prev, next   |
@@ -2176,7 +2176,7 @@ curl "https://api.huobi.pro/v1/order/matchresults?symbol=ethusdt"
 
 Parameter  | Data Type | Required | Default | Description                                   | Value Range
 ---------  | --------- | -------- | ------- | -----------                                   | ----------
-symbol     | string    | true     | NA      | The trading symbol to trade                   | All supported trading symbols, e.g. btcusdt, bccbtc
+symbol     | string    | true     | NA      | The trading symbol to trade                   | All supported trading symbol, e.g. btcusdt, bccbtc.Refer to `GET /v1/common/symbols`
 types      | string    | false    | all      | The types of order to include in the search   | buy-market, sell-market, buy-limit, sell-limit, buy-ioc, sell-ioc, buy-limit-maker, sell-limit-maker, buy-stop-limit, sell-stop-limit
 states     | string    | false    | NA      | The states of order to include in the search  | submitted, partial-filled, partial-canceled, filled, canceled
 start-date | string    | false    | -1d    | Search starts date, in format yyyy-mm-dd      |Value range [((end-date) – 1), (end-date)], maximum query window size is 2 days, query window shift should be within past 61 days |
@@ -2257,7 +2257,7 @@ curl "https://api.huobi.pro/v1/fee/fee-rate/get?symbols=btcusdt,ethusdt,ltcusdt"
 
 Parameter | Data Type | Required | Default | Description                 | Value Range
 --------- | --------- | -------- | ------- | -----------                 | -----------
-symbols    | string    | true     | NA      | The trading symbols to query, separated by comma | Refer to /v1/common/symbols
+symbols    | string    | true     | NA      | The trading symbols to query, separated by comma | Refer to `GET /v1/common/symbols`
 
 > Response:
 
@@ -2335,8 +2335,8 @@ curl -X POST -H 'Content-Type: application/json' "https://api.huobi.pro/v1/dw/tr
 
 Parameter  | Data Type | Required | Default | Description
 ---------  | --------- | -------- | ------- | -----------
-symbol     | string    | true     | NA      | Refer to /v1/common/symbols
-currency   | string    | true     | NA      | Refer to /v1/common/currencys
+symbol     | string    | true     | NA      | The trading symbol, e.g. btcusdt, bccbtc
+currency   | string    | true     | NA      | The currency to transfer
 amount     | string    | true     | NA      | The amount of currency to transfer
 
 > The above command returns JSON structured like this:
@@ -2376,8 +2376,8 @@ curl -X POST -H 'Content-Type: application/json' "https://api.huobi.pro/v1/dw/tr
 
 Parameter  | Data Type | Required | Default | Description
 ---------  | --------- | -------- | ------- | -----------
-symbol     | string    | true     | NA      | Refer to /v1/common/symbols
-currency   | string    | true     | NA      | Refer to /v1/common/currencys
+symbol     | string    | true     | NA      | The trading symbol, e.g. btcusdt, bccbtc
+currency   | string    | true     | NA      | The currency to transfer
 amount     | string    | true     | NA      | The amount of currency to transfer
 
 > The above command returns JSON structured like this:
@@ -2552,7 +2552,7 @@ curl "https://api.huobi.pro/v1/margin/load-orders?symbol=ethusdt"
 
 Parameter  | Data Type | Required | Default | Description                                   | Value Range
 ---------  | --------- | -------- | ------- | -----------                                   | ----------
-symbol     | string    | true     | NA      | The trading symbol to trade                   | Refer to /v1/common/symbols
+symbol     | string    | true     | NA      | The trading symbol to trade                   | The trading symbol, e.g. btcusdt, bccbtc
 states     | string    | false    | NA      | Order status  | created,accrual,cleared,invalid
 start-date | string    | false    | -61d    | Search starts date, in format yyyy-mm-dd      | NA
 end-date   | string    | false    | today   | Search ends date, in format yyyy-mm-dd        | NA
@@ -2619,7 +2619,7 @@ curl "https://api.huobi.pro/v1/margin/accounts/balance?symbol=btcusdt"
 
 Parameter  | Data Type | Required | Default | Description
 ---------  | --------- | -------- | ------- | -----------
-symbol     | string    | true     | NA      | Refer to /v1/common/symbols
+symbol     | string    | true     | NA      | The trading symbol, e.g. btcusdt, bccbtc
 sub-uid     | int    | false     | If not entered, by default it returns margin account details of current user      | Sub user ID (mandatory field while parent user querying sub user’s margin account details)
 
 > The above command returns JSON structured like this:
