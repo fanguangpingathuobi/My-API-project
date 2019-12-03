@@ -118,7 +118,7 @@ A valid request consists of below parts:
 
 ### Signature Method
 
-The signature may be different if the request text is different, thereore the request should be normalized before signing. Below signing steps take the order query as an example:
+The signature may be different if the request text is different, therefore the request should be normalized before signing. Below signing steps take the order query as an example:
 
 This is a full URL to query one order:
 
