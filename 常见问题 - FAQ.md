@@ -31,7 +31,7 @@ A：Please check below possible reasons:
 3) The connection is broken due to network issue.
 4) It is suggested to implement WebSocket re-connect mechanism. If Ping/Pong works well but the connection is broken, the application should be able to re-connect automatically.
 
-### Q4：What is the difference between <u>api.huobi.pro</u> 与 <u>api-aws.huobi.pro</u>?
+### Q4：What is the difference between <u>api.huobi.pro</u> and <u>api-aws.huobi.pro</u>?
 A：The host <u>api-aws.huobi.pro</u> is optimized for AWS client, the latency is lower.
 
 ### Q5：Why the signature authentication always fail?
