@@ -41,7 +41,7 @@ https://github.com/huobiapi?tab=repositories
 
 ## Interface Type
 
-There are two types of interfac, you can choose the proper one according to your scenario and preferences.
+There are two types of interface, you can choose the proper one according to your scenario and preferences.
 
 ### REST API
 
