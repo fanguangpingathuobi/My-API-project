@@ -12,7 +12,7 @@ The example of request and response is showing in the right hand side.
 
 ## Market Maker Program
 
-It is very welcome for market maker who has good market making strategy and large trading volume. If your Huobi Spot account or Contract account has at least 20 BTC, you can send your email to:
+It is very welcome for market maker who has good market making strategy and large trading volume. If your Huobi Spot account or Contract account has at least 10 BTC, you can send your email to:
 
 - [MM_service@huobi.com](mailto:MM_service@huobi.com) for Huobi Global (spot / leverage) market maker
 - [dm_mm@huobi.com](mailto:dm_mm@huobi.com) for Huobi Contract market maker
