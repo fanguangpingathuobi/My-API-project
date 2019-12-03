@@ -8,8 +8,10 @@ How to subscribe: Login to [API Announcements page](https://huobiglobal.zendesk.
 ## Access and Authentication
 
 ### Q1：How many API Keys one user can apply?
-A:  Every account can create 5 API Keys, and each API Key can be granted with 3 permissions: **read**, **trade** and **withdraw**.
-Each account could create up to 200 sub accounts, and each sub account could create 5 API Keys, each API key can be granted with 2 permissions: **read** and **transact**.
+A:  Every user can create 5 API Keys, and each API Key can be granted with 3 permissions: **read**, **trade** and **withdraw**.
+Each user could create up to 200 sub users, and each sub user could create 5 API Keys, each API key can be granted with 2 permissions: **read** and **trade**.
+
+Below are the explanation for permissions:
 
 1) Read permission: It is used to query data, for example, **query orders**, **query trades**. 
 
